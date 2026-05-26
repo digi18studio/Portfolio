@@ -2629,16 +2629,26 @@ body.hovering-dark .custom-cursor-follower {
    ========================================================================== */
 .client-marquee-container {
   width: 100%;
-  overflow: hidden;
-  margin-top: 14px;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  scrollbar-width: none; /* Hide standard Firefox scrollbars */
+  -ms-overflow-style: none;  /* Hide IE scrollbars */
+  margin-top: 24px; /* Increased gap */
   position: relative;
-  background: var(--bg-tertiary);
+  background: rgba(255, 255, 255, 0.09); /* Lighter gray background */
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   padding: 8px 12px;
   display: flex;
   align-items: center;
   cursor: grab;
+}
+
+.client-marquee-container::-webkit-scrollbar {
+  display: none; /* Hide WebKit scrollbars */
+}
+
+[data-theme="light"] .client-marquee-container {
+  background: rgba(0, 0, 0, 0.04); /* Light mode matching background */
 }
 
 .client-marquee-container:active {
@@ -2672,41 +2682,153 @@ body.hovering-dark .custom-cursor-follower {
 /* ==========================================================================
    PREMIUM COLLABORATE FORM MULTIPLE SELECT DROPDOWN
    ========================================================================== */
-.select-multiple-input {
-  min-height: 120px;
-  height: auto !important;
-  padding: 8px 12px !important;
-  background-image: none !important; /* Hide standard dropdown arrow as it is a listbox */
+/* ==========================================================================
+   PREMIUM COLLABORATE FORM CUSTOM DROPDOWN SELECT WITH CHECKBOXES
+   ========================================================================== */
+.custom-dropdown {
+  position: relative;
+  width: 100%;
+}
+
+.custom-dropdown-trigger {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast);
+  user-select: none;
+}
+
+.custom-dropdown-trigger:hover,
+.custom-dropdown-trigger.active {
+  border-color: var(--accent-color);
+}
+
+.custom-dropdown-trigger.active {
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.trigger-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 12px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.trigger-arrow {
+  width: 16px;
+  height: 16px;
+  stroke: var(--text-secondary);
+  stroke-width: 2.5;
+  fill: none;
+  transition: transform var(--transition-smooth);
+  flex-shrink: 0;
+}
+
+.custom-dropdown-trigger.active .trigger-arrow {
+  transform: rotate(180deg);
+}
+
+.custom-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--card-shadow);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-10px);
+  transition: opacity var(--transition-smooth), transform var(--transition-smooth);
+  max-height: 240px;
   overflow-y: auto;
 }
 
-.select-multiple-input option {
-  padding: 8px 12px;
+.custom-dropdown-menu.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.custom-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
   border-radius: var(--radius-sm);
-  margin-bottom: 4px;
-  background: transparent;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  user-select: none;
+}
+
+.custom-dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="light"] .custom-dropdown-item:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+/* Custom Checkbox Design */
+.custom-dropdown-item input[type="checkbox"] {
+  display: none;
+}
+
+.checkbox-custom {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--text-muted);
+  border-radius: 4px;
+  display: inline-block;
+  position: relative;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.custom-dropdown-item input[type="checkbox"]:checked + .checkbox-custom {
+  background: var(--accent-gradient);
+  border-color: transparent;
+}
+
+.custom-dropdown-item input[type="checkbox"]:checked + .checkbox-custom::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 5px;
+  height: 9px;
+  border: solid #07070a;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.item-text {
+  font-size: 0.9rem;
   color: var(--text-secondary);
   font-weight: 500;
-  transition: background-color var(--transition-fast), color var(--transition-fast);
-  cursor: pointer;
+  transition: color var(--transition-fast);
 }
 
-.select-multiple-input option:hover,
-.select-multiple-input option:focus {
-  background: rgba(255, 255, 255, 0.05) !important;
-  color: var(--text-primary) !important;
-}
-
-[data-theme="light"] .select-multiple-input option:hover,
-[data-theme="light"] .select-multiple-input option:focus {
-  background: rgba(0, 0, 0, 0.03) !important;
-  color: var(--text-primary) !important;
-}
-
-.select-multiple-input option:checked {
-  background: var(--accent-gradient) !important;
-  color: #07070a !important;
-  font-weight: 700;
+.custom-dropdown-item input[type="checkbox"]:checked ~ .item-text {
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 /* ==========================================================================

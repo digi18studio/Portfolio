@@ -721,15 +721,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let isHovered = false;
     let isDragging = false;
 
+    let currentScroll = 0;
+
     // Smooth auto-scroll RAF loop
     const scrollStep = () => {
       if (!isHovered && !isDown && !isDragging) {
-        rowEl.scrollLeft += scrollSpeed;
+        currentScroll += scrollSpeed;
 
         const halfWidth = track.scrollWidth / 2;
-        if (rowEl.scrollLeft >= halfWidth) {
-          rowEl.scrollLeft -= halfWidth;
+        if (currentScroll >= halfWidth) {
+          currentScroll -= halfWidth;
         }
+        rowEl.scrollLeft = currentScroll;
+      } else {
+        // Sync our javascript fractional scroll position when dragging/swiping manually
+        currentScroll = rowEl.scrollLeft;
       }
       requestAnimationFrame(scrollStep);
     };
@@ -788,20 +794,75 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (rowEl.scrollLeft <= 0) {
         rowEl.scrollLeft += halfWidth;
       }
+      currentScroll = rowEl.scrollLeft; // Sync fractional position
     });
   };
 
   // Launch Marquee rows for software stack (3 rows)
   document.querySelectorAll('.software-marquee-row').forEach((row, index) => {
-    // Offset speeds slightly for different rows
-    const speed = index === 1 ? 0.75 : 0.65;
+    // Offset speeds slightly for different rows (slower for premium gracefulness)
+    const speed = index === 1 ? 0.52 : 0.42;
     setupInfiniteMarquee(row, speed);
   });
 
   // Launch Marquee row for clients surveys (1 row)
   const clientMarquee = document.getElementById('client-marquee-container');
   if (clientMarquee) {
-    setupInfiniteMarquee(clientMarquee, 0.55);
+    setupInfiniteMarquee(clientMarquee, 0.32);
+  }
+
+  // Custom Dropdown Checkboxes Interactive Logic
+  const dropdownTrigger = document.getElementById('custom-dropdown-trigger');
+  const dropdownMenu = document.getElementById('custom-dropdown-menu');
+  
+  if (dropdownTrigger && dropdownMenu) {
+    const triggerText = dropdownTrigger.querySelector('.trigger-text');
+    const checkboxes = dropdownMenu.querySelectorAll('input[type="checkbox"]');
+    const nativeSelect = document.getElementById('form-service');
+
+    // Toggle dropdown visibility
+    dropdownTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdownTrigger.classList.toggle('active');
+      dropdownMenu.classList.toggle('active');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('#custom-dropdown-container')) {
+        dropdownTrigger.classList.remove('active');
+        dropdownMenu.classList.remove('active');
+      }
+    });
+
+    // Handle checkboxes interaction
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', () => {
+        const selectedTexts = [];
+        const selectedValues = [];
+
+        checkboxes.forEach(cb => {
+          if (cb.checked) {
+            selectedTexts.push(cb.getAttribute('data-text'));
+            selectedValues.push(cb.value);
+          }
+        });
+
+        // Update trigger text header
+        if (selectedTexts.length > 0) {
+          triggerText.textContent = selectedTexts.join(', ');
+        } else {
+          triggerText.textContent = 'Select / Choose';
+        }
+
+        // Sync with hidden native multiple select options
+        if (nativeSelect) {
+          Array.from(nativeSelect.options).forEach(option => {
+            option.selected = selectedValues.includes(option.value);
+          });
+        }
+      });
+    });
   }
 
 });

@@ -1146,9 +1146,42 @@
             </div>
 
             <div class="form-field-wrap">
-              <label for="form-service">Required Expertise</label>
-              <select id="form-service" class="form-input select-multiple-input hovering-link-target" required multiple>
-                <option value="" disabled>Select / Choose</option>
+              <label>Required Expertise</label>
+              <div class="custom-dropdown" id="custom-dropdown-container">
+                <div class="custom-dropdown-trigger hovering-link-target" id="custom-dropdown-trigger">
+                  <span class="trigger-text">Select / Choose</span>
+                  <svg viewBox="0 0 24 24" class="trigger-arrow"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div class="custom-dropdown-menu" id="custom-dropdown-menu">
+                  <label class="custom-dropdown-item hovering-link-target">
+                    <input type="checkbox" value="uiux-web" data-text="UI/UX & Web Development">
+                    <span class="checkbox-custom"></span>
+                    <span class="item-text">UI/UX & Web Development</span>
+                  </label>
+                  <label class="custom-dropdown-item hovering-link-target">
+                    <input type="checkbox" value="logo-branding" data-text="Logo Design & Branding">
+                    <span class="checkbox-custom"></span>
+                    <span class="item-text">Logo Design & Branding</span>
+                  </label>
+                  <label class="custom-dropdown-item hovering-link-target">
+                    <input type="checkbox" value="video-shoot" data-text="Video Shoot & Color Grading">
+                    <span class="checkbox-custom"></span>
+                    <span class="item-text">Video Shoot & Color Grading</span>
+                  </label>
+                  <label class="custom-dropdown-item hovering-link-target">
+                    <input type="checkbox" value="wedding-invite" data-text="Wedding Shoot & E-Invites">
+                    <span class="checkbox-custom"></span>
+                    <span class="item-text">Wedding Shoot & E-Invites</span>
+                  </label>
+                  <label class="custom-dropdown-item hovering-link-target">
+                    <input type="checkbox" value="reels-youtube" data-text="YouTube Content & Instagram Reels">
+                    <span class="checkbox-custom"></span>
+                    <span class="item-text">YouTube Content & Instagram Reels</span>
+                  </label>
+                </div>
+              </div>
+              <!-- Hidden select for compatibility with existing form code in main.js -->
+              <select id="form-service" multiple style="display: none;">
                 <option value="uiux-web">UI/UX & Web Development</option>
                 <option value="logo-branding">Logo Design & Branding</option>
                 <option value="video-shoot">Video Shoot & Color Grading</option>
@@ -1190,7 +1223,7 @@
                 </svg>
               </div>
               <div class="channel-details">
-                <h5>Call Us</h5>
+                <h5>Call me</h5>
                 <p>+91 9001055339</p>
               </div>
             </a>
