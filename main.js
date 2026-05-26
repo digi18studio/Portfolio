@@ -281,98 +281,175 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  const modal = document.getElementById('project-modal');
-  const modalClose = document.getElementById('modal-close');
-  const modalMedia = document.getElementById('modal-project-media');
-  const modalCategory = document.getElementById('modal-project-category');
-  const modalTitle = document.getElementById('modal-project-title');
-  const modalDesc1 = document.getElementById('modal-project-desc-1');
-  const modalDesc2 = document.getElementById('modal-project-desc-2');
-  const modalDeliverables = document.getElementById('modal-project-deliverables');
-  const modalClient = document.getElementById('modal-project-client');
-
-  // Attach click listener on portfolio cards
+  // ==========================================================================
+  // 6. PREMIUM ACCORDION-STYLE INLINE EXPANSION SYSTEM
+  // ==========================================================================
+  
+  // Wrap existing portfolio card children in a header container dynamically to support accordion layout
   portfolioCards.forEach(card => {
-    card.addEventListener('click', (e) => {
-      const projectId = card.getAttribute('data-project-id');
-      const data = projectDatabase[projectId];
-
-      if (data) {
-        // Populate modal contents
-        modalMedia.innerHTML = `<img src="${data.image}" alt="${data.title}">`;
-        modalCategory.textContent = data.category;
-        modalTitle.textContent = data.title;
-        modalDesc1.textContent = data.desc1;
-        modalDesc2.textContent = data.desc2;
-        modalDeliverables.textContent = data.deliverables;
-        modalClient.textContent = data.client;
-
-        // Populate modal bento showcase grid dynamically with 12 light-gray staggered boxes
-        const modalBentoGrid = document.getElementById('modal-bento-grid');
-        if (modalBentoGrid) {
-          let bentoHTML = '';
-          const bentoLayouts = [
-            { cls: 'span-col-2 span-row-2', lbl: 'Creative Composition #1', aspect: 'Large Showcase' },
-            { cls: '', lbl: 'Draft Frame #2', aspect: 'Square aspect' },
-            { cls: 'span-row-2', lbl: 'Editorial Concept #3', aspect: 'Portrait aspect' },
-            { cls: 'span-col-2', lbl: 'Visual Interface #4', aspect: 'Landscape aspect' },
-            { cls: '', lbl: 'Dynamic Element #5', aspect: 'Square aspect' },
-            { cls: 'span-row-2', lbl: 'Cinematic Mockup #6', aspect: 'Portrait aspect' },
-            { cls: 'span-col-2 span-row-2', lbl: 'Featured Project #7', aspect: 'Large Showcase' },
-            { cls: '', lbl: 'Branding Frame #8', aspect: 'Square aspect' },
-            { cls: 'span-col-2', lbl: 'Interface Layout #9', aspect: 'Landscape aspect' },
-            { cls: '', lbl: 'Aesthetic Concept #10', aspect: 'Square aspect' },
-            { cls: 'span-row-2', lbl: 'Design Spread #11', aspect: 'Portrait aspect' },
-            { cls: 'span-col-2', lbl: 'Interactive System #12', aspect: 'Landscape aspect' }
-          ];
-
-          bentoLayouts.forEach((item, index) => {
-            bentoHTML += `
-              <div class="modal-bento-card ${item.cls}">
-                <div class="modal-bento-card-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="9" y1="3" x2="9" y2="21"></line>
-                  </svg>
-                </div>
-                <div class="modal-bento-card-info">
-                  <h4>${item.lbl}</h4>
-                  <p>${item.aspect}</p>
-                </div>
-              </div>
-            `;
-          });
-
-          modalBentoGrid.innerHTML = bentoHTML;
-        }
-
-        // Toggle classes
-        modal.classList.add('active');
-        document.body.classList.add('scroll-locked');
-        
-        // Reset modal scroll to top when opened
-        modal.querySelector('.modal-container').scrollTop = 0;
-      }
-    });
+    const header = document.createElement('div');
+    header.className = 'portfolio-card-header';
+    header.setAttribute('role', 'button');
+    header.setAttribute('aria-expanded', 'false');
+    header.setAttribute('tabindex', '0');
+    
+    // Move all initial elements (media box, content box, action btn wrap) inside the header
+    while (card.firstChild) {
+      header.appendChild(card.firstChild);
+    }
+    
+    card.appendChild(header);
+    header.classList.add('hovering-link-target');
   });
 
-  const closeModal = () => {
-    modal.classList.remove('active');
-    document.body.classList.remove('scroll-locked');
+  // Re-run hover effects so the new header elements register interactive cursor reactions
+  addHoverEffects();
+
+  // Helper function to dynamically generate the 12-bento staggered grid of gray placeholder work showcases
+  const getBentoGalleryHTML = () => {
+    const bentoLayouts = [
+      { cls: 'span-col-2 span-row-2', lbl: 'Creative Composition #1', aspect: 'Large Showcase' },
+      { cls: '', lbl: 'Draft Frame #2', aspect: 'Square aspect' },
+      { cls: 'span-row-2', lbl: 'Editorial Concept #3', aspect: 'Portrait aspect' },
+      { cls: 'span-col-2', lbl: 'Visual Interface #4', aspect: 'Landscape aspect' },
+      { cls: '', lbl: 'Dynamic Element #5', aspect: 'Square aspect' },
+      { cls: 'span-row-2', lbl: 'Cinematic Mockup #6', aspect: 'Portrait aspect' },
+      { cls: 'span-col-2 span-row-2', lbl: 'Featured Project #7', aspect: 'Large Showcase' },
+      { cls: '', lbl: 'Branding Frame #8', aspect: 'Square aspect' },
+      { cls: 'span-col-2', lbl: 'Interface Layout #9', aspect: 'Landscape aspect' },
+      { cls: '', lbl: 'Aesthetic Concept #10', aspect: 'Square aspect' },
+      { cls: 'span-row-2', lbl: 'Design Spread #11', aspect: 'Portrait aspect' },
+      { cls: 'span-col-2', lbl: 'Interactive System #12', aspect: 'Landscape aspect' }
+    ];
+
+    let bentoHTML = '';
+    bentoLayouts.forEach((item) => {
+      bentoHTML += `
+        <div class="detail-bento-card ${item.cls}">
+          <div class="detail-bento-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="9" y1="3" x2="9" y2="21"></line>
+            </svg>
+          </div>
+          <div class="detail-bento-card-info">
+            <h4>${item.lbl}</h4>
+            <p>${item.aspect}</p>
+          </div>
+        </div>
+      `;
+    });
+    return bentoHTML;
   };
 
-  modalClose.addEventListener('click', closeModal);
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      closeModal();
-    }
-  });
+  // Accordion toggle click/keydown listeners
+  portfolioCards.forEach(card => {
+    const header = card.querySelector('.portfolio-card-header');
+    if (!header) return;
 
-  // Close on Escape key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('active')) {
-      closeModal();
-    }
+    const toggleAccordion = () => {
+      const projectId = card.getAttribute('data-project-id');
+      const data = projectDatabase[projectId];
+      
+      if (!data) return;
+
+      let body = card.querySelector('.portfolio-card-body');
+
+      // Create body dynamically if it doesn't exist yet
+      if (!body) {
+        body = document.createElement('div');
+        body.className = 'portfolio-card-body';
+        body.innerHTML = `
+          <div class="detail-side-by-side">
+            <div class="detail-media-panel">
+              <img src="${data.image}" alt="${data.title}">
+            </div>
+            <div class="detail-info-panel">
+              <div class="detail-meta-group">
+                <span class="detail-category-tag">${data.category}</span>
+                <h4 class="detail-title">${data.title}</h4>
+              </div>
+              <div class="detail-desc-group">
+                <p class="detail-desc-primary">${data.desc1}</p>
+                <p class="detail-desc-secondary">${data.desc2}</p>
+              </div>
+              <div class="detail-specs">
+                <div class="spec-item">
+                  <span class="spec-label">Deliverables</span>
+                  <span class="spec-value">${data.deliverables}</span>
+                </div>
+                <div class="spec-item">
+                  <span class="spec-label">Client / Context</span>
+                  <span class="spec-value">${data.client}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="detail-work-gallery">
+            <h4 class="gallery-title">Work Gallery & Deliverables</h4>
+            <div class="detail-bento-grid">
+              ${getBentoGalleryHTML()}
+            </div>
+          </div>
+        `;
+        card.appendChild(body);
+        
+        // Refresh cursor link highlights inside expanded body
+        setTimeout(addHoverEffects, 50);
+      }
+
+      const isOpening = !card.classList.contains('active');
+
+      // Collapse all other active cards first (Strict Accordion behavior)
+      portfolioCards.forEach(otherCard => {
+        if (otherCard !== card && otherCard.classList.contains('active')) {
+          otherCard.classList.remove('active');
+          const otherHeader = otherCard.querySelector('.portfolio-card-header');
+          if (otherHeader) otherHeader.setAttribute('aria-expanded', 'false');
+          const otherBody = otherCard.querySelector('.portfolio-card-body');
+          if (otherBody) {
+            otherBody.style.maxHeight = otherBody.scrollHeight + 'px';
+            otherBody.offsetHeight; // force reflow
+            otherBody.style.maxHeight = '0px';
+          }
+        }
+      });
+
+      if (isOpening) {
+        card.classList.add('active');
+        header.setAttribute('aria-expanded', 'true');
+        body.style.maxHeight = '0px';
+        body.offsetHeight; // force reflow
+        body.style.maxHeight = body.scrollHeight + 'px';
+        
+        // Let height remain responsive after transition ends
+        setTimeout(() => {
+          if (card.classList.contains('active')) {
+            body.style.maxHeight = 'none';
+          }
+        }, 500);
+
+        // Smooth scroll cards into viewport
+        setTimeout(() => {
+          card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 300);
+      } else {
+        card.classList.remove('active');
+        header.setAttribute('aria-expanded', 'false');
+        body.style.maxHeight = body.scrollHeight + 'px';
+        body.offsetHeight; // force reflow
+        body.style.maxHeight = '0px';
+      }
+    };
+
+    header.addEventListener('click', toggleAccordion);
+
+    header.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleAccordion();
+      }
+    });
   });
 
 
@@ -475,11 +552,28 @@ document.addEventListener('DOMContentLoaded', () => {
   contactForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
+    const name = document.getElementById('form-name').value;
+    const email = document.getElementById('form-email').value;
+    const message = document.getElementById('form-message').value;
+
+    // Get all selected options from the multiple select dropdown
+    const selectEl = document.getElementById('form-service');
+    const selectedDisciplines = Array.from(selectEl.selectedOptions)
+      .map(opt => opt.text)
+      .join(', ');
+
+    // Construct professional WhatsApp message
+    const waText = `Hi H. Seth,\n\nI'd like to collaborate on a new creative project!\n\n*Name:* ${name}\n*Email:* ${email}\n*Disciplines:* ${selectedDisciplines || 'None Selected'}\n*Note:* ${message}`;
+
+    // Open WhatsApp
+    const waUrl = `https://wa.me/919001055339?text=${encodeURIComponent(waText)}`;
+    window.open(waUrl, '_blank');
+
     // Standard high-end form feedback animation
     const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML = `
-      <span>Message Dispatched</span>
-      <svg viewBox="0 0 24 24" style="stroke: #10b981;">
+      <span>Opening WhatsApp</span>
+      <svg viewBox="0 0 24 24" style="stroke: #10b981; fill: none; width: 16px; height: 16px;">
         <polyline points="20 6 9 17 4 12"></polyline>
       </svg>
     `;
@@ -516,8 +610,198 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Mobile menu action trigger
   mobileToggle.addEventListener('click', () => {
-    // Elegant slide-in overlays can be built, or standard alerts
-    alert('This responsive creative layout features high-end Dribbble filters, detail modals, responsive structures, and theme syncs!');
+    console.log('Mobile navigation toggled.');
   });
+
+  // ==========================================================================
+  // 11. INTERACTIVE 3D PERSPECTIVE PARALLAX TILT FOR HERO IMAGE
+  // ==========================================================================
+  const heroPanel = document.getElementById('hero-interactive-panel');
+  const heroFrame = document.getElementById('hero-interactive-frame');
+  const heroGlare = document.getElementById('hero-image-glare');
+  const glassPlate = document.querySelector('.hero-image-glass-plate');
+  const heroImg = document.getElementById('hero-showcase-img');
+
+  if (heroPanel && heroFrame) {
+    const handleMove = (clientX, clientY) => {
+      const rect = heroPanel.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+
+      // Center coordinates
+      const cx = rect.width / 2;
+      const cy = rect.height / 2;
+
+      // Rotation rates (Max 12 degrees tilt for premium subtleness)
+      const tiltX = ((cy - y) / cy) * 12;
+      const tiltY = ((x - cx) / cx) * 12;
+
+      // Apply 3D rotation
+      heroFrame.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
+
+      // Dynamic glare placement
+      if (heroGlare) {
+        heroGlare.style.opacity = '1';
+        const glareX = (x / rect.width) * 100;
+        const glareY = (y / rect.height) * 100;
+        heroGlare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255, 255, 255, 0.22) 0%, transparent 60%)`;
+      }
+
+      // Parallax layer depths
+      if (glassPlate) {
+        glassPlate.style.transform = `translateZ(40px) rotateX(${tiltX * 0.1}deg) rotateY(${tiltY * 0.1}deg)`;
+      }
+      if (heroImg) {
+        heroImg.style.transform = `translateZ(10px) scale(1.03)`;
+      }
+    };
+
+    const handleReset = () => {
+      // Snap back smoothly
+      heroFrame.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+      if (heroGlare) {
+        heroGlare.style.opacity = '0';
+      }
+      if (glassPlate) {
+        glassPlate.style.transform = 'translateZ(30px)';
+      }
+      if (heroImg) {
+        heroImg.style.transform = 'translateZ(10px) scale(1)';
+      }
+    };
+
+    // Mouse Events (Desktop)
+    heroPanel.addEventListener('mousemove', (e) => {
+      handleMove(e.clientX, e.clientY);
+    });
+
+    heroPanel.addEventListener('mouseleave', () => {
+      handleReset();
+    });
+
+    // Touch Events (Mobile & Tablet)
+    heroPanel.addEventListener('touchmove', (e) => {
+      if (e.touches && e.touches.length > 0) {
+        // Prevent page scroll while dragging finger on the image
+        e.preventDefault();
+        handleMove(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: false });
+
+    heroPanel.addEventListener('touchend', () => {
+      handleReset();
+    });
+  }
+
+  // ==========================================================================
+  // 12. DYNAMIC SMOOTH INFINITE MARQUEE & DRAG-SCROLL & TOUCH DEVICE OVERRIDES
+  // ==========================================================================
+
+  // Check and hide custom cursor elements on mobile/touch screens
+  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+    const customCursor = document.getElementById('custom-cursor');
+    const customFollower = document.getElementById('custom-cursor-follower');
+    if (customCursor) customCursor.style.display = 'none';
+    if (customFollower) customFollower.style.display = 'none';
+    document.body.classList.add('touch-device');
+  }
+
+  // Setup loop and drag-scroll on marquee containers
+  const setupInfiniteMarquee = (rowEl, scrollSpeed = 0.65) => {
+    const track = rowEl.querySelector('.software-marquee-track, .client-marquee-track');
+    if (!track) return;
+
+    // Duplicate children to enable seamless looping
+    const originalHTML = track.innerHTML;
+    track.innerHTML = originalHTML + originalHTML;
+
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+    let isHovered = false;
+    let isDragging = false;
+
+    // Smooth auto-scroll RAF loop
+    const scrollStep = () => {
+      if (!isHovered && !isDown && !isDragging) {
+        rowEl.scrollLeft += scrollSpeed;
+
+        const halfWidth = track.scrollWidth / 2;
+        if (rowEl.scrollLeft >= halfWidth) {
+          rowEl.scrollLeft -= halfWidth;
+        }
+      }
+      requestAnimationFrame(scrollStep);
+    };
+    requestAnimationFrame(scrollStep);
+
+    // Pause on mouse hover (Desktop)
+    rowEl.addEventListener('mouseenter', () => { isHovered = true; });
+    rowEl.addEventListener('mouseleave', () => { isHovered = false; });
+
+    // Drag to scroll triggers (Mouse Drag Desktop)
+    rowEl.addEventListener('mousedown', (e) => {
+      isDown = true;
+      isDragging = true;
+      rowEl.classList.add('active-dragging');
+      startX = e.pageX - rowEl.offsetLeft;
+      scrollLeft = rowEl.scrollLeft;
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (isDown) {
+        isDown = false;
+        setTimeout(() => { isDragging = false; }, 200);
+        rowEl.classList.remove('active-dragging');
+      }
+    });
+
+    rowEl.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - rowEl.offsetLeft;
+      const walk = (x - startX) * 1.5; // Drag scroll sensitivity
+      rowEl.scrollLeft = scrollLeft - walk;
+
+      // Infinite loop wrap check while dragging
+      const halfWidth = track.scrollWidth / 2;
+      if (rowEl.scrollLeft >= halfWidth) {
+        rowEl.scrollLeft -= halfWidth;
+      } else if (rowEl.scrollLeft <= 0) {
+        rowEl.scrollLeft += halfWidth;
+      }
+    });
+
+    // Touch events (Mobile drag/swipe interactions)
+    rowEl.addEventListener('touchstart', () => {
+      isDragging = true;
+    });
+    rowEl.addEventListener('touchend', () => {
+      setTimeout(() => { isDragging = false; }, 800);
+    });
+
+    // Manual scroll sync check (touch swipe wrap around)
+    rowEl.addEventListener('scroll', () => {
+      const halfWidth = track.scrollWidth / 2;
+      if (rowEl.scrollLeft >= halfWidth) {
+        rowEl.scrollLeft -= halfWidth;
+      } else if (rowEl.scrollLeft <= 0) {
+        rowEl.scrollLeft += halfWidth;
+      }
+    });
+  };
+
+  // Launch Marquee rows for software stack (3 rows)
+  document.querySelectorAll('.software-marquee-row').forEach((row, index) => {
+    // Offset speeds slightly for different rows
+    const speed = index === 1 ? 0.75 : 0.65;
+    setupInfiniteMarquee(row, speed);
+  });
+
+  // Launch Marquee row for clients surveys (1 row)
+  const clientMarquee = document.getElementById('client-marquee-container');
+  if (clientMarquee) {
+    setupInfiniteMarquee(clientMarquee, 0.55);
+  }
 
 });
