@@ -614,82 +614,94 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ==========================================================================
-  // 11. INTERACTIVE 3D PERSPECTIVE PARALLAX TILT FOR HERO IMAGE
+  // 11. INTERACTIVE HERO 3D FLIP & SOLAR SYSTEM ORBITS CONTROL
   // ==========================================================================
-  const heroPanel = document.getElementById('hero-interactive-panel');
-  const heroFrame = document.getElementById('hero-interactive-frame');
-  const heroGlare = document.getElementById('hero-image-glare');
-  const glassPlate = document.querySelector('.hero-image-glass-plate');
-  const heroImg = document.getElementById('hero-showcase-img');
+  const heroScene = document.getElementById('hero-3d-scene');
+  const heroCard = document.getElementById('hero-interactive-card');
+  const centerTriggerFront = document.getElementById('hero-center-trigger-front');
+  const centerTriggerBack = document.getElementById('hero-center-trigger-back');
+  const servicePlanets = document.querySelectorAll('.service-planet');
 
-  if (heroPanel && heroFrame) {
-    const handleMove = (clientX, clientY) => {
-      const rect = heroPanel.getBoundingClientRect();
-      const x = clientX - rect.left;
-      const y = clientY - rect.top;
+  if (heroScene && heroCard) {
+    // 1. Entrance staggered load animations
+    // Add active scene class to pop center and slide-in other boxes
+    setTimeout(() => {
+      heroScene.classList.add('scene-active');
+    }, 150);
 
-      // Center coordinates
-      const cx = rect.width / 2;
-      const cy = rect.height / 2;
+    // After entrance animations finish (1200ms), mark floaters as ready to enable floating animation loops
+    setTimeout(() => {
+      document.querySelectorAll('.floating-box').forEach(box => {
+        box.classList.add('floater-ready');
+      });
+    }, 1400);
 
-      // Rotation rates (Max 12 degrees tilt for premium subtleness)
-      const tiltX = ((cy - y) / cy) * 12;
-      const tiltY = ((x - cx) / cx) * 12;
-
-      // Apply 3D rotation
-      heroFrame.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
-
-      // Dynamic glare placement
-      if (heroGlare) {
-        heroGlare.style.opacity = '1';
-        const glareX = (x / rect.width) * 100;
-        const glareY = (y / rect.height) * 100;
-        heroGlare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255, 255, 255, 0.22) 0%, transparent 60%)`;
-      }
-
-      // Parallax layer depths
-      if (glassPlate) {
-        glassPlate.style.transform = `translateZ(40px) rotateX(${tiltX * 0.1}deg) rotateY(${tiltY * 0.1}deg)`;
-      }
-      if (heroImg) {
-        heroImg.style.transform = `translateZ(10px) scale(1.03)`;
-      }
-    };
-
-    const handleReset = () => {
-      // Snap back smoothly
-      heroFrame.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-      if (heroGlare) {
-        heroGlare.style.opacity = '0';
-      }
-      if (glassPlate) {
-        glassPlate.style.transform = 'translateZ(30px)';
-      }
-      if (heroImg) {
-        heroImg.style.transform = 'translateZ(10px) scale(1)';
+    // 2. Click events to toggle 3D Flip state
+    const performCardFlip = () => {
+      const isFlipped = heroCard.classList.contains('flipped');
+      
+      if (!isFlipped) {
+        // FLIPPING TO ORBIT MODE
+        // Temporarily pause floaters to keep transitions smooth
+        document.querySelectorAll('.floating-box').forEach(box => {
+          box.classList.remove('floater-ready');
+        });
+        heroCard.classList.add('flipped');
+      } else {
+        // FLIPPING BACK TO STANDARD MODE
+        heroCard.classList.remove('flipped');
+        
+        // Stagger re-enabling float loops after card finishes flipping back (850ms)
+        setTimeout(() => {
+          document.querySelectorAll('.floating-box').forEach(box => {
+            box.classList.add('floater-ready');
+          });
+        }, 900);
       }
     };
 
-    // Mouse Events (Desktop)
-    heroPanel.addEventListener('mousemove', (e) => {
-      handleMove(e.clientX, e.clientY);
-    });
+    if (centerTriggerFront) {
+      centerTriggerFront.addEventListener('click', (e) => {
+        e.stopPropagation();
+        performCardFlip();
+      });
+    }
 
-    heroPanel.addEventListener('mouseleave', () => {
-      handleReset();
-    });
+    if (centerTriggerBack) {
+      centerTriggerBack.addEventListener('click', (e) => {
+        e.stopPropagation();
+        performCardFlip();
+      });
+    }
 
-    // Touch Events (Mobile & Tablet)
-    heroPanel.addEventListener('touchmove', (e) => {
-      if (e.touches && e.touches.length > 0) {
-        // Prevent page scroll while dragging finger on the image
-        e.preventDefault();
-        handleMove(e.touches[0].clientX, e.touches[0].clientY);
-      }
-    }, { passive: false });
-
-    heroPanel.addEventListener('touchend', () => {
-      handleReset();
+    // 3. Option B integration: Clicking planets triggers portfolio bento detailed view expansion
+    servicePlanets.forEach(planet => {
+      planet.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const projectId = planet.getAttribute('data-project-id');
+        
+        // Find matching portfolio card in Bento grid
+        const projectCard = document.querySelector(`.portfolio-card[data-project-id="${projectId}"]`);
+        
+        if (projectCard) {
+          const cardHeader = projectCard.querySelector('.portfolio-card-header');
+          if (cardHeader) {
+            // First, smooth-scroll viewer down to curations section
+            const workSection = document.getElementById('work');
+            if (workSection) {
+              workSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            
+            // Expand accordion once viewport matches position
+            setTimeout(() => {
+              // Only click if it's not already active/expanded
+              if (!projectCard.classList.contains('active')) {
+                cardHeader.click();
+              }
+            }, 650);
+          }
+        }
+      });
     });
   }
 

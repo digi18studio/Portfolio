@@ -2843,3 +2843,390 @@ body.hovering-dark .custom-cursor-follower {
     cursor: auto !important;
   }
 }
+
+/* ==========================================================================
+   INTERACTIVE HERO REDESIGN: 3D FLIP & SOLAR SYSTEM ORBITS
+   ========================================================================== */
+
+/* 3D Scene Viewport */
+.hero-3d-scene {
+  perspective: 1500px;
+  width: 100%;
+  height: 520px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .hero-3d-scene {
+    height: 480px;
+    margin-top: 20px;
+  }
+}
+
+/* 3D Interactive Card (Front/Back container) */
+.hero-interactive-card {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transform-style: preserve-3d;
+  transition: transform 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.hero-interactive-card.flipped {
+  transform: rotateY(180deg);
+}
+
+/* Card Faces (Front & Back) */
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-face-front {
+  transform: rotateY(0deg);
+  z-index: 2;
+}
+
+.card-face-back {
+  transform: rotateY(180deg);
+  z-index: 1;
+}
+
+/* ==========================================
+   FRONT FACE: Standard Floating SVGs
+   ========================================== */
+
+/* Center Circle Trigger (Unclipped dynamic wrapper for vector SVGs) */
+.hero-center-circle-wrapper {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 280px;
+  height: 280px;
+  cursor: pointer;
+  z-index: 5;
+  background: transparent;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 15px 40px rgba(0, 0, 0, 0.45));
+}
+
+.hero-center-circle-wrapper:hover {
+  transform: translate(-50%, -50%) scale(1.05);
+}
+
+.hero-center-circle-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Static aligned Click Here box (Moved to Middle-Left and expanded width for dashed guide path) */
+.hero-box-click-here {
+  position: absolute;
+  left: calc(50% - 290px);
+  top: calc(50% + 40px);
+  transform: translateY(-50%) scale(0);
+  width: 155px;
+  z-index: 12;
+  opacity: 0;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s, opacity 0.6s ease 0.3s;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.25));
+}
+
+.hero-box-click-here img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Surrounding Floating Boxes clustered closely around Center Circle */
+.hero-box {
+  position: absolute;
+  z-index: 12;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.25));
+}
+
+.hero-box img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Tight relative offsets matching the blueprint exactly, creating a layered overlap depth effect */
+.hero-box-instagram {
+  left: calc(50% - 195px);
+  top: calc(50% - 150px);
+  width: 100px;
+  opacity: 0;
+  transform: translate(-20px, -20px);
+}
+
+.hero-box-review {
+  left: calc(50% - 160px);
+  top: calc(50% + 95px);
+  width: 150px;
+  opacity: 0;
+  transform: translate(-20px, 20px);
+}
+
+.hero-box-team {
+  left: calc(50% + 90px);
+  top: calc(50% + 75px);
+  width: 180px;
+  opacity: 0;
+  transform: translate(20px, 20px);
+}
+
+.hero-box-hs-portfolio {
+  left: calc(50% + 80px);
+  top: calc(50% - 165px);
+  width: 185px;
+  opacity: 0;
+  transform: translate(20px, -20px);
+}
+
+/* Entrance Active States (controlled by .scene-active) */
+.scene-active .hero-center-circle-wrapper {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.scene-active .hero-box-click-here {
+  transform: translateY(-50%) scale(1);
+  opacity: 1;
+}
+
+.scene-active .hero-box-instagram {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+.scene-active .hero-box-review {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+.scene-active .hero-box-team {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+.scene-active .hero-box-hs-portfolio {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* Sinusoidal drifting animations applied after ease-in finishes */
+.scene-active .floating-box.floater-ready {
+  animation: floatSine 6s ease-in-out infinite;
+}
+
+.scene-active #hero-box-instagram.floater-ready {
+  animation-delay: 0s;
+  animation-duration: 5.5s;
+}
+
+.scene-active #hero-box-review.floater-ready {
+  animation-delay: -1.5s;
+  animation-duration: 6.5s;
+}
+
+.scene-active #hero-box-team.floater-ready {
+  animation-delay: -3.2s;
+  animation-duration: 7s;
+}
+
+.scene-active #hero-box-hs-portfolio.floater-ready {
+  animation-delay: -4.8s;
+  animation-duration: 5.8s;
+}
+
+@keyframes floatSine {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(1.5deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+
+/* ==========================================
+   BACK FACE: Solar System Orbit View (Spaced Out & High Contrast)
+   ========================================== */
+
+/* The Flipped Center Sun Anchor */
+.hero-sun-wrapper {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  width: 220px;
+  height: 220px;
+  cursor: pointer;
+  z-index: 10;
+  background: transparent;
+  transition: transform var(--transition-smooth);
+  filter: drop-shadow(0 15px 40px rgba(0, 0, 0, 0.45));
+}
+
+.hero-sun-wrapper:hover {
+  transform: translate(-50%, -50%) scale(1.04);
+}
+
+.hero-sun-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+
+
+/* Concentric Orbit Paths (Highly visible, spaced out lines) */
+.solar-orbits-container {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.orbit-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border: 1.2px dashed rgba(255, 157, 0, 0.35) !important;
+  border-radius: 50%;
+}
+
+[data-theme="light"] .orbit-ring {
+  border-color: rgba(7, 7, 10, 0.22) !important;
+}
+
+.orbit-ring-1 {
+  width: 250px;
+  height: 250px;
+}
+
+.orbit-ring-2 {
+  width: 370px;
+  height: 370px;
+}
+
+.orbit-ring-3 {
+  width: 490px;
+  height: 490px;
+}
+
+/* Revolving compact service planets to prevent overlaps (random sizing variables) */
+.service-planet {
+  position: absolute;
+  left: calc(50% - (var(--planet-size) / 2));
+  top: calc(50% - (var(--planet-size) / 2));
+  width: var(--planet-size);
+  height: var(--planet-size);
+  border-radius: 50%;
+  
+  /* Premium glassmorphic texture with a low-transparency category color tint */
+  background: rgba(var(--planet-color), 0.16);
+  border: 1.5px solid rgba(var(--planet-color), 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(var(--planet-color), 0.2);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast), background-color var(--transition-fast);
+}
+
+[data-theme="light"] .service-planet {
+  background: rgba(var(--planet-color), 0.08);
+  border-color: rgba(var(--planet-color), 0.35);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08), inset 0 0 8px rgba(var(--planet-color), 0.05);
+}
+
+/* Interactive orbiting and unique random sizing configurations */
+.planet-graphics { --planet-color: 139, 92, 246; --orbit-radius: 125px; --planet-size: 74px; }
+.planet-branding { --planet-color: 249, 115, 22; --orbit-radius: 185px; --planet-size: 60px; }
+.planet-video { --planet-color: 239, 68, 68; --orbit-radius: 185px; --planet-size: 60px; }
+.planet-invitations { --planet-color: 16, 185, 129; --orbit-radius: 245px; --planet-size: 54px; }
+.planet-webdev { --planet-color: 6, 182, 212; --orbit-radius: 245px; --planet-size: 54px; }
+
+.service-planet {
+  animation: orbitRotation var(--rotation-speed, 30s) linear infinite;
+  animation-delay: var(--delay-offset, 0s);
+}
+
+@keyframes orbitRotation {
+  from { transform: rotate(0deg) translateX(var(--orbit-radius)) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(var(--orbit-radius)) rotate(-360deg); }
+}
+
+/* Hover behaviors */
+.service-planet:hover {
+  background: rgba(var(--planet-color), 0.26);
+  border-color: rgb(var(--planet-color));
+  box-shadow: 0 0 25px rgba(var(--planet-color), 0.65), inset 0 0 12px rgba(var(--planet-color), 0.35);
+  z-index: 20;
+}
+
+.service-planet:hover .planet-label {
+  color: #ffffff;
+  text-shadow: 0 2px 6px rgba(var(--planet-color), 0.8);
+}
+
+[data-theme="light"] .service-planet:hover .planet-label {
+  color: #000000;
+}
+
+.service-planet:hover .planet-glow {
+  opacity: 0.5;
+}
+
+.planet-glow {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  border-radius: 50%;
+  background: rgba(var(--planet-color), 0.35);
+  filter: blur(10px);
+  opacity: 0.15;
+  z-index: -1;
+  transition: opacity var(--transition-fast);
+}
+
+.planet-label {
+  font-size: 0.58rem;
+  font-weight: 850;
+  color: #ffffff; /* Outstanding white text for high-contrast visibility in Dark Mode */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+  padding: 3px;
+  pointer-events: none;
+  transition: color var(--transition-fast);
+}
+
+[data-theme="light"] .planet-label {
+  color: #2c2c35; /* Crisp dark slate color in Light Mode */
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.4);
+}
+

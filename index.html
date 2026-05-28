@@ -120,15 +120,92 @@
           </div>
         </div>
 
-        <!-- Right Column: Visual Showcase Showcase Image placeholder -->
-        <div class="hero-image-panel" id="hero-interactive-panel">
-          <div class="hero-image-frame" id="hero-interactive-frame">
-            <div class="hero-image-glare" id="hero-image-glare"></div>
-            <div class="hero-image-glass-plate">
-              <span class="glass-plate-tag">Interactive Depth</span>
+        <!-- Right Column: Interactive 3D Showcase Panel (Floating SVGs & Solar System Orbits) -->
+        <div class="hero-3d-scene" id="hero-3d-scene">
+          <div class="hero-interactive-card" id="hero-interactive-card">
+            
+            <!-- FRONT FACE: Standard Mode (Avatar with Floating SVGs & Click Here Guide) -->
+            <div class="card-face card-face-front">
+              
+
+              <!-- Center Interactive Avatar Circle -->
+              <div class="hero-center-circle-wrapper hovering-link-target" id="hero-center-trigger-front">
+                <img src="assets/HERO/Main Center Circle.svg" alt="H. Seth Creative Center" class="hero-center-circle-img">
+              </div>
+
+              <!-- Click Here note (middle-right, static attachment) -->
+              <div class="hero-box hero-box-click-here" id="hero-box-click-here">
+                <img src="assets/HERO/Click Here.svg" alt="Click Here">
+              </div>
+
+              <!-- Surrounding Floating Elements -->
+              <div class="hero-box hero-box-instagram floating-box hovering-link-target" id="hero-box-instagram">
+                <a href="https://instagram.com/hseth.official" target="_blank" aria-label="H Seth Instagram">
+                  <img src="assets/HERO/Instagram.svg" alt="Instagram">
+                </a>
+              </div>
+
+              <div class="hero-box hero-box-review floating-box" id="hero-box-review">
+                <img src="assets/HERO/Review.svg" alt="Average Review">
+              </div>
+
+              <div class="hero-box hero-box-team floating-box" id="hero-box-team">
+                <img src="assets/HERO/Team.svg" alt="Team Support">
+              </div>
+
+              <div class="hero-box hero-box-hs-portfolio floating-box" id="hero-box-hs-portfolio">
+                <img src="assets/HERO/HS Portfolio.svg" alt="H Seth Portfolio">
+              </div>
             </div>
-            <img id="hero-showcase-img" src="assets/hero_img_hs.svg" alt="H. Seth Creative Showcase"
-              onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%25%22 height=%22100%25%22 viewBox=%220 0 400 500%22><defs><linearGradient id=%22g%22 x1=%220%25%22 y1=%220%25%22 x2=%22100%25%22 y2=%22100%25%22><stop offset=%220%25%22 stop-color=%22%23e1ff7e%22 stop-opacity=%220.15%22/><stop offset=%22100%25%22 stop-color=%22%23ff9d00%22 stop-opacity=%220.05%22/></linearGradient></defs><rect width=%22400%22 height=%22500%22 fill=%22%230f0f15%22/><rect width=%22400%22 height=%22500%22 fill=%22url(%23g)%22/><circle cx=%22200%22 cy=%22230%22 r=%2260%22 stroke=%22url(%23g)%22 stroke-width=%222%22 fill=%22none%22 opacity=%220.6%22/><text x=%2250%25%22 y=%22235%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23ff9d00%22 font-family=%22sans-serif%22 font-weight=%22bold%22 font-size=%2224%22>H. S.</text><text x=%2250%25%22 y=%22330%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23a0a0b0%22 font-family=%22sans-serif%22 font-size=%2214%22>SHOWCASE IMAGE</text><text x=%2250%25%22 y=%22355%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%2362627a%22 font-family=%22sans-serif%22 font-size=%2212%22>Replace with assets/hero_img_hs.svg</text></svg>'">
+
+            <!-- BACK FACE: Solar System Orbit Mode (Center Sun with Rotating Planetary Services) -->
+            <div class="card-face card-face-back">
+              
+              <!-- Center Anchor: The Sun (Pulsing overlay removed) -->
+              <div class="hero-sun-wrapper hovering-link-target" id="hero-center-trigger-back">
+                <img src="assets/HERO/Main Center Circle.svg" alt="H. Seth Creative Sun" class="hero-sun-img">
+              </div>
+
+              <!-- Concentric Orbit Ring Lines -->
+              <div class="solar-orbits-container">
+                <div class="orbit-ring orbit-ring-1"></div>
+                <div class="orbit-ring orbit-ring-2"></div>
+                <div class="orbit-ring orbit-ring-3"></div>
+              </div>
+
+              <!-- Floating/Revolving Service Planet Nodes -->
+              <!-- Orbit 1: Graphic Designing -->
+              <div class="service-planet planet-graphics hovering-link-target" data-project-id="1" data-orbit="1" style="--rotation-speed: 24s; --delay-offset: 0s;">
+                <div class="planet-glow"></div>
+                <span class="planet-label">Graphic Designing</span>
+              </div>
+
+              <!-- Orbit 2: Branding & Packaging -->
+              <div class="service-planet planet-branding hovering-link-target" data-project-id="2" data-orbit="2" style="--rotation-speed: 42s; --delay-offset: -5s;">
+                <div class="planet-glow"></div>
+                <span class="planet-label">Branding</span>
+              </div>
+
+              <!-- Orbit 2: Video Shoot & Production -->
+              <div class="service-planet planet-video hovering-link-target" data-project-id="3" data-orbit="2" style="--rotation-speed: 31s; --delay-offset: -20s;">
+                <div class="planet-glow"></div>
+                <span class="planet-label">Video Shoot</span>
+              </div>
+
+              <!-- Orbit 3: Digital Invitations -->
+              <div class="service-planet planet-invitations hovering-link-target" data-project-id="4" data-orbit="3" style="--rotation-speed: 62s; --delay-offset: -12s;">
+                <div class="planet-glow"></div>
+                <span class="planet-label">E-Invites</span>
+              </div>
+
+              <!-- Orbit 3: Motion Graphics & Web Dev -->
+              <div class="service-planet planet-webdev hovering-link-target" data-project-id="7" data-orbit="3" style="--rotation-speed: 48s; --delay-offset: -32s;">
+                <div class="planet-glow"></div>
+                <span class="planet-label">Web Dev</span>
+              </div>
+
+            </div>
+
           </div>
         </div>
       </div>
