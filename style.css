@@ -72,8 +72,8 @@
   --border-color: rgba(0, 0, 0, 0.06);
   --border-hover: rgba(0, 0, 0, 0.12);
   --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-  --glass-bg: rgba(255, 255, 255, 0.8);
-  --glass-border: rgba(0, 0, 0, 0.04);
+  --glass-bg: rgba(255, 255, 255, 0.6); /* Reduced from 0.8 to 0.6 for higher transparency glassmorphism */
+  --glass-border: rgba(0, 0, 0, 0.1); /* Tuned to exactly 0.1 for a beautifully balanced, subtle edge contour */
   --scrollbar-track: #f6f6f3;
   --scrollbar-thumb: #d6d6d3;
 
@@ -289,11 +289,13 @@ body.hovering-dark .custom-cursor-follower {
   transition: width var(--transition-fast);
 }
 
-.nav-link:hover {
+.nav-link:hover,
+.nav-link.active {
   color: var(--text-primary);
 }
 
-.nav-link:hover::after {
+.nav-link:hover::after,
+.nav-link.active::after {
   width: 100%;
 }
 
@@ -804,7 +806,7 @@ body.hovering-dark .custom-cursor-follower {
   position: relative;
 }
 
-/* Red Box: Left Square Image */
+/* Left Number Box instead of Image */
 .row-media-box {
   width: 80px;
   height: 80px;
@@ -814,14 +816,23 @@ body.hovering-dark .custom-cursor-follower {
   background: var(--bg-primary);
   border: 1px solid var(--border-color);
   flex-shrink: 0;
-  transition: transform var(--transition-smooth), border-color var(--transition-smooth);
+  display: flex; /* Centering the number */
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-smooth), border-color var(--transition-smooth), background-color var(--transition-smooth);
 }
 
-.row-media-box img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform var(--transition-slow);
+.row-number {
+  font-family: var(--font-heading);
+  font-size: 2.25rem; /* Increased font-size for extra bold prominence */
+  font-weight: 800; /* Extra bold */
+  color: var(--text-muted); /* Premium gray color */
+  transition: color var(--transition-smooth);
+}
+
+.portfolio-card:hover .row-number,
+.portfolio-card.active .row-number {
+  color: var(--accent-color); /* Beautiful theme accent shift on hover/active */
 }
 
 .portfolio-card:hover .row-media-box img {
@@ -1093,9 +1104,10 @@ body.hovering-dark .custom-cursor-follower {
 .detail-bento-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 110px;
+  grid-auto-rows: 135px; /* Increased row height for clean 1:1, 16:9, and 9:16 aspect ratios */
   gap: 12px;
   width: 100%;
+  grid-auto-flow: dense; /* Fills all gaps and empty spaces dynamically */
 }
 
 .portfolio-card.active .detail-bento-card {
@@ -1110,7 +1122,7 @@ body.hovering-dark .custom-cursor-follower {
   position: relative;
   overflow: hidden;
   transition: background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
-  min-height: 110px;
+  min-height: 135px; /* Matches new grid-auto-rows height */
   text-align: left;
 }
 
@@ -1126,7 +1138,7 @@ body.hovering-dark .custom-cursor-follower {
 
 .detail-bento-card.span-row-2 {
   grid-row: span 2;
-  min-height: 232px;
+  min-height: 282px; /* Denser height to match two vertical cells (135px * 2 + 12px gap = 282px) */
 }
 
 .detail-bento-card-icon {
@@ -2291,10 +2303,10 @@ body.hovering-dark .custom-cursor-follower {
   width: 100%;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 900px), (pointer: coarse) and (orientation: portrait) {
   .hero-layout-grid {
-    grid-template-columns: 1fr;
-    gap: 32px;
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
   }
 }
 
@@ -2634,13 +2646,14 @@ body.hovering-dark .custom-cursor-follower {
   -ms-overflow-style: none;  /* Hide IE scrollbars */
   margin-top: 24px; /* Increased gap */
   position: relative;
-  background: rgba(255, 255, 255, 0.09); /* Lighter gray background */
-  border: 1px solid var(--border-color);
+  background: rgba(254, 126, 7, 0.06); /* Soft orange-yellow background tint matching the theme */
+  border: 1px solid rgba(254, 126, 7, 0.22); /* Theme accent border */
   border-radius: var(--radius-sm);
   padding: 8px 12px;
   display: flex;
   align-items: center;
   cursor: grab;
+  box-shadow: 0 4px 20px rgba(254, 126, 7, 0.03); /* Ambient theme drop glow */
 }
 
 .client-marquee-container::-webkit-scrollbar {
@@ -2648,7 +2661,8 @@ body.hovering-dark .custom-cursor-follower {
 }
 
 [data-theme="light"] .client-marquee-container {
-  background: rgba(0, 0, 0, 0.04); /* Light mode matching background */
+  background: rgba(254, 126, 7, 0.04); /* Light mode matching yellow-orange tint */
+  border-color: rgba(254, 126, 7, 0.18);
 }
 
 .client-marquee-container:active {
@@ -2665,18 +2679,20 @@ body.hovering-dark .custom-cursor-follower {
 .client-marquee-track span {
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--text-secondary);
+  color: var(--accent-color); /* Theme primary orange-yellow for client names */
   text-transform: uppercase;
   letter-spacing: 0.5px;
   display: inline-block;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(254, 126, 7, 0.05); /* Soft background contrast */
+  border: 1px solid rgba(254, 126, 7, 0.12); /* Delicate orange-yellow divider border */
   padding: 2px 8px;
   border-radius: 4px;
 }
 
 [data-theme="light"] .client-marquee-track span {
-  color: var(--text-primary);
-  background: rgba(0, 0, 0, 0.03);
+  color: var(--accent-color);
+  background: rgba(254, 126, 7, 0.04);
+  border-color: rgba(254, 126, 7, 0.1);
 }
 
 /* ==========================================================================
@@ -2860,14 +2876,89 @@ body.hovering-dark .custom-cursor-follower {
   margin: 0 auto;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 900px), (pointer: coarse) and (orientation: portrait) {
   .hero-3d-scene {
-    height: 480px;
-    margin-top: 20px;
+    height: 380px !important;
+    margin-top: 50px !important; /* Shifter down to avoid overlapping the CTA buttons above */
+  }
+  .hero-interactive-card {
+    --card-scale: 0.65 !important;
+  }
+
+  /* Tighter coordinates to bring floating boxes closer to center circle, preventing side-clipping */
+  .hero-box-instagram {
+    left: calc(50% - 160px) !important;
+    top: calc(50% - 120px) !important;
+    width: 90px !important;
+  }
+
+  .hero-box-hs-portfolio {
+    left: calc(50% + 55px) !important;
+    top: calc(50% - 130px) !important;
+    width: 155px !important;
+  }
+
+  .hero-box-review {
+    left: calc(50% - 135px) !important;
+    top: calc(50% + 75px) !important;
+    width: 130px !important;
+  }
+
+  .hero-box-team {
+    left: calc(50% + 65px) !important;
+    top: calc(50% + 60px) !important;
+    width: 150px !important;
+  }
+
+  .hero-box-click-here {
+    left: calc(50% - 240px) !important;
+    top: calc(50% + 30px) !important;
+    width: 130px !important;
   }
 }
 
-/* 3D Interactive Card (Front/Back container) */
+@media (max-width: 480px) {
+  .hero-3d-scene {
+    height: 340px !important;
+    margin-top: 60px !important; /* Shifted down even further on small phone viewports */
+  }
+  .hero-interactive-card {
+    --card-scale: 0.55 !important;
+  }
+
+  /* Ultra-tight coordinates matching standard mobile display ratios (fits down to 320px screens perfectly) */
+  .hero-box-instagram {
+    left: calc(50% - 140px) !important;
+    top: calc(50% - 100px) !important;
+    width: 80px !important;
+  }
+
+  .hero-box-hs-portfolio {
+    left: calc(50% + 40px) !important;
+    top: calc(50% - 110px) !important;
+    width: 135px !important;
+  }
+
+  .hero-box-review {
+    left: calc(50% - 120px) !important;
+    top: calc(50% + 60px) !important;
+    width: 115px !important;
+  }
+
+  .hero-box-team {
+    left: calc(50% + 50px) !important;
+    top: calc(50% + 50px) !important;
+    width: 130px !important;
+  }
+
+  .hero-box-click-here {
+    left: calc(50% - 200px) !important;
+    top: calc(50% + 20px) !important;
+    width: 110px !important;
+  }
+}
+
+/* 3D Interactive Card (Front/Back container with dynamic orientation scale variable support) */
 .hero-interactive-card {
   width: 100%;
   height: 100%;
@@ -2875,10 +2966,8 @@ body.hovering-dark .custom-cursor-follower {
   transform-style: preserve-3d;
   transition: transform 0.85s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
-}
-
-.hero-interactive-card.flipped {
-  transform: rotateY(180deg);
+  transform: rotateY(var(--card-rotation, 0deg)) scale(var(--card-scale, 1));
+  transform-origin: center center;
 }
 
 /* Card Faces (Front & Back) */
@@ -3228,5 +3317,22 @@ body.hovering-dark .custom-cursor-follower {
 [data-theme="light"] .planet-label {
   color: #2c2c35; /* Crisp dark slate color in Light Mode */
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.4);
+}
+
+/* Constellation Particle Canvas Overlay Styles */
+#hero-particles-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: screen; /* Improves luminous/bloom properties in dark mode */
+}
+
+/* Light mode overrides to make particles and lines crisp and highly visible */
+[data-theme="light"] #hero-particles-canvas {
+  mix-blend-mode: normal;
 }
 

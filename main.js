@@ -308,18 +308,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // Helper function to dynamically generate the 12-bento staggered grid of gray placeholder work showcases
   const getBentoGalleryHTML = () => {
     const bentoLayouts = [
-      { cls: 'span-col-2 span-row-2', lbl: 'Creative Composition #1', aspect: 'Large Showcase' },
-      { cls: '', lbl: 'Draft Frame #2', aspect: 'Square aspect' },
-      { cls: 'span-row-2', lbl: 'Editorial Concept #3', aspect: 'Portrait aspect' },
-      { cls: 'span-col-2', lbl: 'Visual Interface #4', aspect: 'Landscape aspect' },
-      { cls: '', lbl: 'Dynamic Element #5', aspect: 'Square aspect' },
-      { cls: 'span-row-2', lbl: 'Cinematic Mockup #6', aspect: 'Portrait aspect' },
-      { cls: 'span-col-2 span-row-2', lbl: 'Featured Project #7', aspect: 'Large Showcase' },
-      { cls: '', lbl: 'Branding Frame #8', aspect: 'Square aspect' },
-      { cls: 'span-col-2', lbl: 'Interface Layout #9', aspect: 'Landscape aspect' },
-      { cls: '', lbl: 'Aesthetic Concept #10', aspect: 'Square aspect' },
-      { cls: 'span-row-2', lbl: 'Design Spread #11', aspect: 'Portrait aspect' },
-      { cls: 'span-col-2', lbl: 'Interactive System #12', aspect: 'Landscape aspect' }
+      { cls: 'span-col-2 span-row-2', lbl: 'Creative Composition #1', aspect: '1000x1000' },
+      { cls: '', lbl: 'Draft Frame #2', aspect: '1000x1000' },
+      { cls: 'span-row-2', lbl: 'Editorial Concept #3', aspect: '1080x1920' },
+      { cls: 'span-col-2', lbl: 'Visual Interface #4', aspect: '1920x1080' },
+      { cls: '', lbl: 'Dynamic Element #5', aspect: '1000x1000' },
+      { cls: 'span-row-2', lbl: 'Cinematic Mockup #6', aspect: '1080x1920' },
+      { cls: 'span-col-2 span-row-2', lbl: 'Featured Project #7', aspect: '1000x1000' },
+      { cls: '', lbl: 'Branding Frame #8', aspect: '1000x1000' },
+      { cls: 'span-col-2', lbl: 'Interface Layout #9', aspect: '1920x1080' },
+      { cls: '', lbl: 'Aesthetic Concept #10', aspect: '1000x1000' },
+      { cls: 'span-row-2', lbl: 'Design Spread #11', aspect: '1080x1920' },
+      { cls: 'span-col-2', lbl: 'Interactive System #12', aspect: '1920x1080' }
     ];
 
     let bentoHTML = '';
@@ -636,21 +636,23 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }, 1400);
 
-    // 2. Click events to toggle 3D Flip state
+    // 2. Click events to toggle 3D Flip state (always rotating in the same right-to-left direction)
+    let currentRotation = 0;
+
     const performCardFlip = () => {
-      const isFlipped = heroCard.classList.contains('flipped');
+      currentRotation += 180;
+      heroCard.style.setProperty('--card-rotation', `${currentRotation}deg`);
       
-      if (!isFlipped) {
+      const isFlipped = (currentRotation / 180) % 2 !== 0;
+      
+      if (isFlipped) {
         // FLIPPING TO ORBIT MODE
         // Temporarily pause floaters to keep transitions smooth
         document.querySelectorAll('.floating-box').forEach(box => {
           box.classList.remove('floater-ready');
         });
-        heroCard.classList.add('flipped');
       } else {
         // FLIPPING BACK TO STANDARD MODE
-        heroCard.classList.remove('flipped');
-        
         // Stagger re-enabling float loops after card finishes flipping back (850ms)
         setTimeout(() => {
           document.querySelectorAll('.floating-box').forEach(box => {
@@ -876,5 +878,279 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+
+  // ==========================================================================
+  // 13. INTERACTIVE CONSTELLATION PARTICLES BACKGROUND (WITH GYRO SENSORS)
+  // ==========================================================================
+  const canvas = document.getElementById('hero-particles-canvas');
+  const heroSection = document.getElementById('home');
+
+  if (canvas && heroSection) {
+    const ctx = canvas.getContext('2d');
+    let particlesArray = [];
+    const maxParticles = 125; // Rich particle density
+    
+    // Mouse properties relative to hero section bounds
+    let mouse = {
+      x: null,
+      y: null,
+      radius: 155, // Adjusted magnetic radius to exactly 155px as requested
+      active: false
+    };
+
+    // Gyroscope tilt gravity offsets
+    let gravityOffset = {
+      x: 0,
+      y: 0
+    };
+
+    // Resize handler
+    function resizeCanvas() {
+      const rect = heroSection.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Track mouse coordinates on parent container (for Desktop/Laptop hover)
+    heroSection.addEventListener('mousemove', (e) => {
+      const rect = heroSection.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+      mouse.active = true;
+    });
+
+    heroSection.addEventListener('mouseleave', () => {
+      mouse.active = false;
+      mouse.x = null;
+      mouse.y = null;
+    });
+
+    // Touch support for Mobile/Tablet touchscreens (Finger touch, tap, hold, and glide)
+    heroSection.addEventListener('touchstart', (e) => {
+      const rect = heroSection.getBoundingClientRect();
+      if (e.touches && e.touches.length > 0) {
+        mouse.x = e.touches[0].clientX - rect.left;
+        mouse.y = e.touches[0].clientY - rect.top;
+        mouse.active = true;
+      }
+    }, { passive: true });
+
+    heroSection.addEventListener('touchmove', (e) => {
+      const rect = heroSection.getBoundingClientRect();
+      if (e.touches && e.touches.length > 0) {
+        mouse.x = e.touches[0].clientX - rect.left;
+        mouse.y = e.touches[0].clientY - rect.top;
+        mouse.active = true;
+      }
+    }, { passive: true });
+
+    heroSection.addEventListener('touchend', () => {
+      mouse.active = false;
+      mouse.x = null;
+      mouse.y = null;
+    });
+
+    heroSection.addEventListener('touchcancel', () => {
+      mouse.active = false;
+      mouse.x = null;
+      mouse.y = null;
+    });
+
+    // Device orientation gyroscope handler (for mobile devices)
+    window.addEventListener('deviceorientation', (event) => {
+      if (event.gamma !== null && event.beta !== null) {
+        gravityOffset.x = Math.max(Math.min(event.gamma * 0.08, 3), -3);
+        gravityOffset.y = Math.max(Math.min((event.beta - 45) * 0.08, 3), -3);
+      }
+    });
+
+    // Particle Object Blueprint
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.baseX = this.x; // Anchored home X coordinate for instant spring-back
+        this.baseY = this.y; // Anchored home Y coordinate for instant spring-back
+        this.vx = 0;
+        this.vy = 0;
+        this.size = Math.random() * 2 + 1.2; // premium delicate particle sizes
+      }
+
+      // Update positions, velocity vectors, and gravity influences
+      update() {
+        // Shift particle velocity by gyroscope tilt gravity (if mobile)
+        this.vx += gravityOffset.x * 0.012;
+        this.vy += gravityOffset.y * 0.012;
+
+        // Calculate distance to original anchored home position
+        const homeDx = this.baseX - this.x;
+        const homeDy = this.baseY - this.y;
+
+        // ELASTIC HOME SPRING RESTORATION FORCE:
+        // Automatically pulls the particles back to their original home spots instantly.
+        // The spring coefficient (0.08) and damping (0.82) create a beautiful subtle bounce.
+        this.vx += homeDx * 0.08;
+        this.vy += homeDy * 0.08;
+
+        // Friction damping (settles dots exactly at home without infinite oscillation)
+        this.vx *= 0.82;
+        this.vy *= 0.82;
+
+        // Apply velocity to coordinates
+        this.x += this.vx;
+        this.y += this.vy;
+
+        // Desktop mouse attraction / gravity pull
+        if (mouse.active && mouse.x !== null && mouse.y !== null) {
+          const dx = mouse.x - this.x;
+          const dy = mouse.y - this.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          
+          if (dist < mouse.radius) {
+            const force = (mouse.radius - dist) / mouse.radius;
+            
+            // MOUSE INFLUENCE (Temporarily distorts the mesh by overriding spring pull):
+            // 1. Pull towards the mouse using velocity (42px to 155px)
+            // 2. Repel strongly under 42px to prevent overlapping clumps
+            if (dist > 42) {
+              this.vx += (dx / dist) * force * 1.5;
+              this.vy += (dy / dist) * force * 1.5;
+            } else {
+              const repelForce = (42 - dist) / 42;
+              this.vx -= (dx / dist) * repelForce * 2.2;
+              this.vy -= (dy / dist) * repelForce * 2.2;
+            }
+          }
+        }
+      }
+
+      draw() {
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        // ADJUSTED OPACITY FOR PERFECT BALANCE:
+        // 1. Light mode: 100% solid, fully opaque white (1.0) so it stands out strongly on the light off-white background
+        // 2. Dark mode: tuned to exactly 0.25 for an ultra-subtle, premium starry background as requested
+        const particleColor = isLight ? 'rgba(255, 255, 255, 1.0)' : 'rgba(255, 255, 255, 0.25)';
+        
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = particleColor;
+        ctx.fill();
+      }
+    }
+
+    // Populate particles arrays
+    function initParticles() {
+      particlesArray = [];
+      for (let i = 0; i < maxParticles; i++) {
+        particlesArray.push(new Particle());
+      }
+    }
+    initParticles();
+
+    // Re-initialize particles on resizing canvas to ensure equal density
+    window.addEventListener('resize', () => {
+      initParticles();
+    });
+
+    // Draw thin elegant connecting line webs between nearby particles
+    function connectParticles() {
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      const connectionDist = 80;
+
+      for (let a = 0; a < particlesArray.length; a++) {
+        for (let b = a + 1; b < particlesArray.length; b++) {
+          const dx = particlesArray[a].x - particlesArray[b].x;
+          const dy = particlesArray[a].y - particlesArray[b].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < connectionDist) {
+            // WHITE CONNECTING WEBS:
+            // 1. Light mode: 100% solid white (1.0)
+            // 2. Dark mode: tuned to exactly 0.20 for a whisper-soft delicate mesh as requested
+            const baseAlpha = isLight ? 1.0 : 0.20;
+            const alpha = (1 - (dist / connectionDist)) * baseAlpha;
+            ctx.beginPath();
+            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+            ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+            ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+            ctx.lineWidth = isLight ? 1.5 : 0.85; // Thicker in light mode to stand out beautifully on light background
+            ctx.stroke();
+          }
+        }
+
+        // Draw connections to the mouse cursor (creating attraction visual webs)
+        if (mouse.active && mouse.x !== null && mouse.y !== null) {
+          const mdx = particlesArray[a].x - mouse.x;
+          const mdy = particlesArray[a].y - mouse.y;
+          const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+
+          if (mdist < mouse.radius) {
+            // WHITE MOUSE THREADS:
+            // 1. Light mode: 100% solid white (1.0)
+            // 2. Dark mode: tuned to exactly 0.25 as requested
+            const baseMouseAlpha = isLight ? 1.0 : 0.25;
+            const malpha = (1 - (mdist / mouse.radius)) * baseMouseAlpha;
+            ctx.beginPath();
+            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.strokeStyle = `rgba(255, 255, 255, ${malpha})`;
+            ctx.lineWidth = isLight ? 1.8 : 0.95; // Thicker in light mode to be highly visible
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    // Butttery 60FPS animation loop
+    function animateParticles() {
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      
+      // PERFORMANCE BOOST: Disable updates and drawing entirely in light theme to save CPU/GPU cycles
+      if (isLight) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        requestAnimationFrame(animateParticles);
+        return;
+      }
+      
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].update();
+        particlesArray[i].draw();
+      }
+      
+      connectParticles();
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+  }
+
+  // ==========================================================================
+  // 14. SCROLLSPY ACTIVE NAVIGATION UNDERLINE EFFECT
+  // ==========================================================================
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-menu a.nav-link');
+
+  const scrollspyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        navLinks.forEach(link => {
+          // Check if href matches the intersecting section id
+          if (link.getAttribute('href') === `#${id}` || (id === 'home' && link.getAttribute('href') === '#') || (id === 'home' && link.getAttribute('href') === '#home')) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
+        });
+      }
+    });
+  }, {
+    rootMargin: '-30% 0px -60% 0px' // Triggers active link when section occupies main viewport space
+  });
+
+  sections.forEach(section => scrollspyObserver.observe(section));
 
 });

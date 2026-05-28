@@ -29,7 +29,7 @@
     </a>
 
     <ul class="nav-menu">
-      <li><a href="#" class="nav-link hovering-link-target">Home</a></li>
+      <li><a href="#home" class="nav-link hovering-link-target">Home</a></li>
       <li><a href="#work" class="nav-link hovering-link-target">Work</a></li>
       <li><a href="#impact" class="nav-link hovering-link-target">Impact</a></li>
       <li><a href="#tools" class="nav-link hovering-link-target">Tools</a></li>
@@ -57,10 +57,10 @@
         </svg>
       </button>
 
-      <!-- CTA Collaboration Link to direct WhatsApp -->
-      <a href="https://wa.me/919001055339?text=Hello%20H.%20Seth,%20I%20would%20love%20to%20collaborate%20with%20you%20on%20a%20creative%20project!"
-        target="_blank" class="btn-cta hovering-link-target">
-        Let's Chat
+      <!-- CTA Link to Studio Website -->
+      <a href="https://digi18studio.github.io/digi18_website/index.html" target="_blank"
+        class="btn-cta hovering-link-target">
+        Website
         <svg viewBox="0 0 24 24">
           <line x1="5" y1="12" x2="19" y2="12"></line>
           <polyline points="12 5 19 12 12 19"></polyline>
@@ -79,6 +79,7 @@
   <section class="hero-section" id="home">
     <div class="hero-background-grid"></div>
     <div class="hero-glow-orb"></div>
+    <canvas id="hero-particles-canvas"></canvas>
 
     <div class="container hero-content">
       <div class="hero-layout-grid">
@@ -95,8 +96,9 @@
           </h1>
 
           <p class="hero-description">
-            Hi, I am H. Seth Graphics Designer and Digital Content Creator working in the design field for the last 13 years, specialized
-            in Branding and digital designs.
+            Hi, I am H. Seth Graphics Designer and Digital Content Creator working in the design field for the last 13
+            years, specialized
+            in branding and digital solutions.
           </p>
 
           <div class="hero-actions">
@@ -107,9 +109,11 @@
                 <polyline points="12 5 19 12 12 19"></polyline>
               </svg>
             </a>
-            <a href="https://wa.me/919001055339?text=Hi%20H.%20Seth,%20I'd%20love%20to%20request%20your%20latest%20CV%20and%20professional%20portfolio.%20Please%20share%20it%20with%20me!" target="_blank" class="btn-secondary hovering-link-target">
+            <a href="https://wa.me/919001055339?text=Hi%20H.%20Seth,%20I'd%20love%20to%20request%20your%20latest%20CV%20and%20professional%20portfolio.%20Please%20share%20it%20with%20me!"
+              target="_blank" class="btn-secondary hovering-link-target">
               Request CV
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                style="width: 16px; height: 16px;">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                 <polyline points="14 2 14 8 20 8"></polyline>
                 <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -123,14 +127,15 @@
         <!-- Right Column: Interactive 3D Showcase Panel (Floating SVGs & Solar System Orbits) -->
         <div class="hero-3d-scene" id="hero-3d-scene">
           <div class="hero-interactive-card" id="hero-interactive-card">
-            
+
             <!-- FRONT FACE: Standard Mode (Avatar with Floating SVGs & Click Here Guide) -->
             <div class="card-face card-face-front">
-              
+
 
               <!-- Center Interactive Avatar Circle -->
               <div class="hero-center-circle-wrapper hovering-link-target" id="hero-center-trigger-front">
-                <img src="assets/HERO/Main Center Circle.svg" alt="H. Seth Creative Center" class="hero-center-circle-img">
+                <img src="assets/HERO/Main Center Circle.svg" alt="H. Seth Creative Center"
+                  class="hero-center-circle-img">
               </div>
 
               <!-- Click Here note (middle-right, static attachment) -->
@@ -160,7 +165,7 @@
 
             <!-- BACK FACE: Solar System Orbit Mode (Center Sun with Rotating Planetary Services) -->
             <div class="card-face card-face-back">
-              
+
               <!-- Center Anchor: The Sun (Pulsing overlay removed) -->
               <div class="hero-sun-wrapper hovering-link-target" id="hero-center-trigger-back">
                 <img src="assets/HERO/Main Center Circle.svg" alt="H. Seth Creative Sun" class="hero-sun-img">
@@ -175,31 +180,36 @@
 
               <!-- Floating/Revolving Service Planet Nodes -->
               <!-- Orbit 1: Graphic Designing -->
-              <div class="service-planet planet-graphics hovering-link-target" data-project-id="1" data-orbit="1" style="--rotation-speed: 24s; --delay-offset: 0s;">
+              <div class="service-planet planet-graphics hovering-link-target" data-project-id="1" data-orbit="1"
+                style="--rotation-speed: 24s; --delay-offset: 0s;">
                 <div class="planet-glow"></div>
                 <span class="planet-label">Graphic Designing</span>
               </div>
 
               <!-- Orbit 2: Branding & Packaging -->
-              <div class="service-planet planet-branding hovering-link-target" data-project-id="2" data-orbit="2" style="--rotation-speed: 42s; --delay-offset: -5s;">
+              <div class="service-planet planet-branding hovering-link-target" data-project-id="2" data-orbit="2"
+                style="--rotation-speed: 42s; --delay-offset: -5s;">
                 <div class="planet-glow"></div>
                 <span class="planet-label">Branding</span>
               </div>
 
               <!-- Orbit 2: Video Shoot & Production -->
-              <div class="service-planet planet-video hovering-link-target" data-project-id="3" data-orbit="2" style="--rotation-speed: 31s; --delay-offset: -20s;">
+              <div class="service-planet planet-video hovering-link-target" data-project-id="3" data-orbit="2"
+                style="--rotation-speed: 31s; --delay-offset: -20s;">
                 <div class="planet-glow"></div>
                 <span class="planet-label">Video Shoot</span>
               </div>
 
               <!-- Orbit 3: Digital Invitations -->
-              <div class="service-planet planet-invitations hovering-link-target" data-project-id="4" data-orbit="3" style="--rotation-speed: 62s; --delay-offset: -12s;">
+              <div class="service-planet planet-invitations hovering-link-target" data-project-id="4" data-orbit="3"
+                style="--rotation-speed: 62s; --delay-offset: -12s;">
                 <div class="planet-glow"></div>
                 <span class="planet-label">E-Invites</span>
               </div>
 
               <!-- Orbit 3: Motion Graphics & Web Dev -->
-              <div class="service-planet planet-webdev hovering-link-target" data-project-id="7" data-orbit="3" style="--rotation-speed: 48s; --delay-offset: -32s;">
+              <div class="service-planet planet-webdev hovering-link-target" data-project-id="7" data-orbit="3"
+                style="--rotation-speed: 48s; --delay-offset: -32s;">
                 <div class="planet-glow"></div>
                 <span class="planet-label">Web Dev</span>
               </div>
@@ -244,7 +254,7 @@
         <!-- ROW CARD 1: UI/UX Design -->
         <div class="portfolio-card filtered-in" data-category="uiux-web" data-project-id="1">
           <div class="row-media-box">
-            <img src="assets/ui_ux_design.png" alt="UI/UX Mobile App Interface">
+            <span class="row-number">01</span>
           </div>
           <div class="row-content-box">
             <h3 class="row-title">UI/UX Design</h3>
@@ -267,7 +277,7 @@
         <!-- ROW CARD 2: Branding & Packaging -->
         <div class="portfolio-card filtered-in" data-category="branding-print" data-project-id="2">
           <div class="row-media-box">
-            <img src="assets/barnding_packaging.png" alt="Creative Branding & Packaging">
+            <span class="row-number">02</span>
           </div>
           <div class="row-content-box">
             <h3 class="row-title">Branding & Packaging</h3>
@@ -290,7 +300,7 @@
         <!-- ROW CARD 3: Video Shoot & Production -->
         <div class="portfolio-card filtered-in" data-category="video-motion" data-project-id="3">
           <div class="row-media-box">
-            <img src="assets/video_shoot_production.png" alt="Cinematic Video Production">
+            <span class="row-number">03</span>
           </div>
           <div class="row-content-box">
             <h3 class="row-title">Video Shoot & Production</h3>
@@ -313,7 +323,7 @@
         <!-- ROW CARD 4: Digital Invitations -->
         <div class="portfolio-card filtered-in" data-category="invitations" data-project-id="4">
           <div class="row-media-box">
-            <img src="assets/digital_wedding_invitation.png" alt="Luxurious Digital Wedding Invitation">
+            <span class="row-number">04</span>
           </div>
           <div class="row-content-box">
             <h3 class="row-title">Digital Invitations</h3>
@@ -336,7 +346,7 @@
         <!-- ROW CARD 5: YouTube Content Production -->
         <div class="portfolio-card filtered-in" data-category="video-motion" data-project-id="5">
           <div class="row-media-box">
-            <img src="assets/youtube.png" alt="YouTube Content Production">
+            <span class="row-number">05</span>
           </div>
           <div class="row-content-box">
             <h3 class="row-title">YouTube Content Production</h3>
@@ -359,7 +369,7 @@
         <!-- ROW CARD 6: Instagram Reels & Shorts -->
         <div class="portfolio-card filtered-in" data-category="video-motion" data-project-id="6">
           <div class="row-media-box">
-            <img src="assets/reels_editing_vector.png" alt="Instagram Reels & Shorts">
+            <span class="row-number">06</span>
           </div>
           <div class="row-content-box">
             <h3 class="row-title">Instagram Reels & Shorts</h3>
@@ -382,7 +392,7 @@
         <!-- ROW CARD 7: Web & App Development -->
         <div class="portfolio-card filtered-in" data-category="uiux-web" data-project-id="7">
           <div class="row-media-box">
-            <img src="assets/seo_website_development.png" alt="Web & App Development">
+            <span class="row-number">07</span>
           </div>
           <div class="row-content-box">
             <h3 class="row-title">Web & App Development</h3>
@@ -405,7 +415,7 @@
         <!-- ROW CARD 8: Print Media -->
         <div class="portfolio-card filtered-in" data-category="branding-print" data-project-id="8">
           <div class="row-media-box">
-            <img src="assets/print_media.png" alt="Premium Print Media">
+            <span class="row-number">08</span>
           </div>
           <div class="row-content-box">
             <h3 class="row-title">Print Media</h3>
@@ -428,7 +438,7 @@
         <!-- ROW CARD 9: Motion Graphics & Animation -->
         <div class="portfolio-card filtered-in" data-category="video-motion" data-project-id="9">
           <div class="row-media-box">
-            <img src="assets/animation.png" alt="Motion Graphics & Animation">
+            <span class="row-number">09</span>
           </div>
           <div class="row-content-box">
             <h3 class="row-title">Motion Graphics & Animation</h3>
@@ -451,7 +461,7 @@
         <!-- ROW CARD 10: Podcast Shoot & Production -->
         <div class="portfolio-card filtered-in" data-category="video-motion" data-project-id="10">
           <div class="row-media-box">
-            <img src="assets/podcast_shoot.png" alt="Podcast Shoot & Production">
+            <span class="row-number">10</span>
           </div>
           <div class="row-content-box">
             <h3 class="row-title">Podcast Shoot & Production</h3>
@@ -474,7 +484,7 @@
         <!-- ROW CARD 11: Merchandise Design -->
         <div class="portfolio-card filtered-in" data-category="branding-print" data-project-id="11">
           <div class="row-media-box">
-            <img src="assets/merchandise_design.jpg" alt="Merchandise Design">
+            <span class="row-number">11</span>
           </div>
           <div class="row-content-box">
             <h3 class="row-title">Merchandise Design</h3>
@@ -497,7 +507,7 @@
         <!-- ROW CARD 12: Studio Product Photoshoot -->
         <div class="portfolio-card filtered-in" data-category="branding-print" data-project-id="12">
           <div class="row-media-box">
-            <img src="assets/product_photoshoot.jpg" alt="Studio Product Photoshoot">
+            <span class="row-number">12</span>
           </div>
           <div class="row-content-box">
             <h3 class="row-title">Studio Product Photoshoot</h3>
@@ -643,7 +653,8 @@
             </div>
 
             <div style="font-size: 0.8rem; color: var(--text-secondary); text-align: center;">
-              <strong>Graphics</strong> • <strong>UI/UX</strong> • <strong>Web Dev</strong> • <strong>Video shoots</strong> • <strong>Editing</strong> • <strong>Branding</strong>
+              <strong>Graphics</strong> • <strong>UI/UX</strong> • <strong>Web Dev</strong> • <strong>Video
+                shoots</strong> • <strong>Editing</strong> • <strong>Branding</strong>
             </div>
           </div>
         </div>
@@ -751,7 +762,8 @@
               </div>
             </div>
             <h3>AVG. CLIENT REVIEW</h3>
-            <p class="stat-footer-text">Calculated from 120+ client surveys, reflecting our commitment to premium deliverables.</p>
+            <p class="stat-footer-text">Calculated from 120+ client surveys, reflecting our commitment to premium
+              deliverables.</p>
             <div class="client-marquee-container" id="client-marquee-container">
               <div class="client-marquee-track">
                 <span>Doordarshan</span>
@@ -823,7 +835,9 @@
                   <rect width="512" height="512" rx="64" fill="#1e1e1e" />
                   <path d="M192 144c26.5 0 48 21.5 48 48v48h-48c-26.5 0-48-21.5-48-48s21.5-48 48-48z" fill="#f24e1e" />
                   <path d="M240 240h48c26.5 0 48 21.5 48 48s-21.5 48-48 48h-48v-96z" fill="#0acf83" />
-                  <path d="M192 240c26.5 0 48 21.5 48 48v48c0 26.5-21.5 48-48 48s-48-21.5-48-48v-48c0-26.5 21.5-48 48-48z" fill="#1abcfe" />
+                  <path
+                    d="M192 240c26.5 0 48 21.5 48 48v48c0 26.5-21.5 48-48 48s-48-21.5-48-48v-48c0-26.5 21.5-48 48-48z"
+                    fill="#1abcfe" />
                   <path d="M288 144c26.5 0 48 21.5 48 48s-21.5 48-48 48h-48v-96h48z" fill="#ff7262" />
                   <path d="M192 240h48v96h-48c-26.5 0-48-21.5-48-48s21.5-48 48-48z" fill="#a259ff" />
                 </svg>
@@ -840,8 +854,12 @@
               <div class="software-icon">
                 <svg viewBox="0 0 512 512" fill="none">
                   <rect width="512" height="512" rx="64" fill="#011e30" />
-                  <path d="M120 144h88c38 0 64 20 64 54s-26 54-64 54h-44v116h-44V144zm44 74h40c14 0 24-6 24-20s-10-20-24-20h-40v40z" fill="#00c8ff" />
-                  <path d="M280 270c14-16 36-26 64-26 44 0 72 28 72 68v6h-40v-6c0-16-10-28-32-28-18 0-28 12-28 28v70h-40v-16c0-14 0-48 0-66v-34h36v16c0 10 4 20 4 34v-2c0-18-2-34-6-98z" fill="#00c8ff" />
+                  <path
+                    d="M120 144h88c38 0 64 20 64 54s-26 54-64 54h-44v116h-44V144zm44 74h40c14 0 24-6 24-20s-10-20-24-20h-40v40z"
+                    fill="#00c8ff" />
+                  <path
+                    d="M280 270c14-16 36-26 64-26 44 0 72 28 72 68v6h-40v-6c0-16-10-28-32-28-18 0-28 12-28 28v70h-40v-16c0-14 0-48 0-66v-34h36v16c0 10 4 20 4 34v-2c0-18-2-34-6-98z"
+                    fill="#00c8ff" />
                 </svg>
               </div>
               <div class="software-info">
@@ -856,7 +874,8 @@
               <div class="software-icon">
                 <svg viewBox="0 0 512 512" fill="none">
                   <rect width="512" height="512" rx="64" fill="#200c00" />
-                  <path d="M124 144h44l64 168h-48l-14-42h-56l-14 42h-44l68-168zm40 94l-18-56-18 56h36z" fill="#ff9a00" />
+                  <path d="M124 144h44l64 168h-48l-14-42h-56l-14 42h-44l68-168zm40 94l-18-56-18 56h36z"
+                    fill="#ff9a00" />
                   <path d="M260 144h40v36h-40v-36zm0 60h40v164h-40v-164zM320 144h40v224h-40v-224z" fill="#ff9a00" />
                 </svg>
               </div>
@@ -872,8 +891,12 @@
               <div class="software-icon">
                 <svg viewBox="0 0 512 512" fill="none">
                   <rect width="512" height="512" rx="64" fill="#26012b" />
-                  <path d="M120 144h88c38 0 64 20 64 54s-26 54-64 54h-44v116h-44V144zm44 74h40c14 0 24-6 24-20s-10-20-24-20h-40v40z" fill="#e600ff" />
-                  <path d="M280 204h36v20c6-14 20-24 44-24 10 0 16 2 20 4v38c-6-2-12-4-24-4-24 0-40 18-40 44v84h-36V204z" fill="#e600ff" />
+                  <path
+                    d="M120 144h88c38 0 64 20 64 54s-26 54-64 54h-44v116h-44V144zm44 74h40c14 0 24-6 24-20s-10-20-24-20h-40v40z"
+                    fill="#e600ff" />
+                  <path
+                    d="M280 204h36v20c6-14 20-24 44-24 10 0 16 2 20 4v38c-6-2-12-4-24-4-24 0-40 18-40 44v84h-36V204z"
+                    fill="#e600ff" />
                 </svg>
               </div>
               <div class="software-info">
@@ -888,7 +911,8 @@
               <div class="software-icon">
                 <svg viewBox="0 0 512 512" fill="none">
                   <rect width="512" height="512" rx="64" fill="#1b032b" />
-                  <path d="M124 144h44l64 168h-48l-14-42h-56l-14 42h-44l68-168zm40 94l-18-56-18 56h36z" fill="#d2a0ff" />
+                  <path d="M124 144h44l64 168h-48l-14-42h-56l-14 42h-44l68-168zm40 94l-18-56-18 56h36z"
+                    fill="#d2a0ff" />
                   <path d="M260 254h70v30h-70v40h80v32h-116V144h116v32h-80v48z" fill="#d2a0ff" />
                 </svg>
               </div>
@@ -922,7 +946,9 @@
                 <svg viewBox="0 0 512 512" fill="none">
                   <rect width="512" height="512" rx="64" fill="#2b001a" />
                   <path d="M120 144h40v224h-40v-224zm80 60h40v164h-40v-164zm0-60h40v36h-40v-36z" fill="#ff0066" />
-                  <path d="M260 270c14-16 36-26 64-26 44 0 72 28 72 68v6h-40v-6c0-16-10-28-32-28-18 0-28 12-28 28v70h-40v-16c0-14 0-48 0-66v-34h36v16c0 10 4 20 4 34v-2c0-18-2-34-6-98z" fill="#ff0066" />
+                  <path
+                    d="M260 270c14-16 36-26 64-26 44 0 72 28 72 68v6h-40v-6c0-16-10-28-32-28-18 0-28 12-28 28v70h-40v-16c0-14 0-48 0-66v-34h36v16c0 10 4 20 4 34v-2c0-18-2-34-6-98z"
+                    fill="#ff0066" />
                 </svg>
               </div>
               <div class="software-info">
@@ -960,7 +986,9 @@
               <div class="software-icon">
                 <svg viewBox="0 0 512 512" fill="none">
                   <rect width="512" height="512" rx="64" fill="#01211e" />
-                  <path d="M140 144h44v184h80v36H140V144zM275 224h36v20c6-14 20-24 44-24 10 0 16 2 20 4v38c-6-2-12-4-24-4-24 0-40 18-40 44v84h-36V224z" fill="#51f2ff" />
+                  <path
+                    d="M140 144h44v184h80v36H140V144zM275 224h36v20c6-14 20-24 44-24 10 0 16 2 20 4v38c-6-2-12-4-24-4-24 0-40 18-40 44v84h-36V224z"
+                    fill="#51f2ff" />
                 </svg>
               </div>
               <div class="software-info">
@@ -975,7 +1003,9 @@
               <div class="software-icon">
                 <svg viewBox="0 0 512 512" fill="none">
                   <rect width="512" height="512" rx="64" fill="#231c00" />
-                  <path d="M120 144h68c34 0 58 18 58 48s-24 48-58 48h-28v116h-40V144zm40 64h24c12 0 20-6 20-16s-8-16-20-16h-24v32zM260 144h40l28 116 28-116h40l-48 184h-40l-48-184z" fill="#ffd000" />
+                  <path
+                    d="M120 144h68c34 0 58 18 58 48s-24 48-58 48h-28v116h-40V144zm40 64h24c12 0 20-6 20-16s-8-16-20-16h-24v32zM260 144h40l28 116 28-116h40l-48 184h-40l-48-184z"
+                    fill="#ffd000" />
                 </svg>
               </div>
               <div class="software-info">
@@ -990,7 +1020,9 @@
               <div class="software-icon">
                 <svg viewBox="0 0 512 512" fill="none">
                   <rect width="512" height="512" rx="64" fill="#2e001f" />
-                  <path d="M124 144h44l40 84 40-84h44l-64 126v94h-40v-94l-64-126zm196 0c38 0 68 28 68 76s-30 76-68 76h-24v72h-40V144h68zm-28 112h24c18 0 28-10 28-36s-10-36-28-36h-24v72z" fill="#ff6bbd" />
+                  <path
+                    d="M124 144h44l40 84 40-84h44l-64 126v94h-40v-94l-64-126zm196 0c38 0 68 28 68 76s-30 76-68 76h-24v72h-40V144h68zm-28 112h24c18 0 28-10 28-36s-10-36-28-36h-24v72z"
+                    fill="#ff6bbd" />
                 </svg>
               </div>
               <div class="software-info">
@@ -1005,7 +1037,9 @@
               <div class="software-icon">
                 <svg viewBox="0 0 512 512" fill="none">
                   <rect width="512" height="512" rx="64" fill="#022113" />
-                  <path d="M256 96c-88.4 0-160 71.6-160 160 0 52 24.8 98.2 63.2 127.3L256 416l96.8-32.7c38.4-29.1 63.2-75.3 63.2-127.3 0-88.4-71.6-160-160-160zm0 40c66.3 0 120 53.7 120 120 0 35.8-15.7 67.9-40.8 90L256 180 176.8 346C151.7 323.9 136 291.8 136 256c0-66.3 53.7-120 120-120z" fill="#10b981" />
+                  <path
+                    d="M256 96c-88.4 0-160 71.6-160 160 0 52 24.8 98.2 63.2 127.3L256 416l96.8-32.7c38.4-29.1 63.2-75.3 63.2-127.3 0-88.4-71.6-160-160-160zm0 40c66.3 0 120 53.7 120 120 0 35.8-15.7 67.9-40.8 90L256 180 176.8 346C151.7 323.9 136 291.8 136 256c0-66.3 53.7-120 120-120z"
+                    fill="#10b981" />
                 </svg>
               </div>
               <div class="software-info">
@@ -1020,7 +1054,9 @@
               <div class="software-icon">
                 <svg viewBox="0 0 512 512" fill="none">
                   <rect width="512" height="512" rx="64" fill="#00180f" />
-                  <path d="M160 160h120c24 0 40 12 40 32s-16 32-40 32h-80v128h-40V160zm40 44h60c6 0 12-4 12-12s-6-12-12-12h-60v24zM320 224l32 48 32-48h44l-48 72 48 88h-44l-32-56-32 56h-44l48-88-48-72h44z" fill="#05d574" />
+                  <path
+                    d="M160 160h120c24 0 40 12 40 32s-16 32-40 32h-80v128h-40V160zm40 44h60c6 0 12-4 12-12s-6-12-12-12h-60v24zM320 224l32 48 32-48h44l-48 72 48 88h-44l-32-56-32 56h-44l48-88-48-72h44z"
+                    fill="#05d574" />
                 </svg>
               </div>
               <div class="software-info">
@@ -1035,7 +1071,8 @@
               <div class="software-icon">
                 <svg viewBox="0 0 512 512" fill="none">
                   <rect width="512" height="512" rx="64" fill="#1c0303" />
-                  <path d="M256 100l130 75v150L256 400 126 325v-150L256 100zm0 46L166 200v92l90 52 90-52v-92l-90-54z" fill="#ef4444" />
+                  <path d="M256 100l130 75v150L256 400 126 325v-150L256 100zm0 46L166 200v92l90 52 90-52v-92l-90-54z"
+                    fill="#ef4444" />
                 </svg>
               </div>
               <div class="software-info">
@@ -1050,8 +1087,12 @@
               <div class="software-icon">
                 <svg viewBox="0 0 512 512" fill="none">
                   <rect width="512" height="512" rx="64" fill="#011026" />
-                  <path d="M160 256c0-53 43-96 96-96s96 43 96 96c0 12-2 24-6 34v16a112 112 0 1 1-180-84v34c4-10 6-22 6-34z" fill="#3b82f6" />
-                  <path d="M120 220v72c0 24 16 44 40 44V176c-24 0-40 20-40 44zm272 0c0-24-16-44-40-44v160c24 0 40-20 40-44v-72z" fill="#ff9d00" />
+                  <path
+                    d="M160 256c0-53 43-96 96-96s96 43 96 96c0 12-2 24-6 34v16a112 112 0 1 1-180-84v34c4-10 6-22 6-34z"
+                    fill="#3b82f6" />
+                  <path
+                    d="M120 220v72c0 24 16 44 40 44V176c-24 0-40 20-40 44zm272 0c0-24-16-44-40-44v160c24 0 40-20 40-44v-72z"
+                    fill="#ff9d00" />
                 </svg>
               </div>
               <div class="software-info">
@@ -1067,7 +1108,9 @@
                 <svg viewBox="0 0 512 512" fill="none">
                   <rect width="512" height="512" rx="64" fill="#021021" />
                   <circle cx="256" cy="256" r="160" stroke="#3b82f6" stroke-width="24" />
-                  <path d="M290 190c-35-35-90-35-120 0s-30 90 0 120 90 30 120 0l-30-30c-15 15-45 15-60 0s-15-45 0-60 45-15 60 0l30-30z" fill="#3b82f6" />
+                  <path
+                    d="M290 190c-35-35-90-35-120 0s-30 90 0 120 90 30 120 0l-30-30c-15 15-45 15-60 0s-15-45 0-60 45-15 60 0l30-30z"
+                    fill="#3b82f6" />
                 </svg>
               </div>
               <div class="software-info">
@@ -1087,7 +1130,9 @@
               <div class="software-icon">
                 <svg viewBox="0 0 512 512" fill="none">
                   <rect width="512" height="512" rx="64" fill="#201002" />
-                  <path d="M380 220c0 55-45 100-100 100s-100-45-100-100 45-100 100-100c28 0 54 11 73 30l47-47c-30-30-73-47-120-47-99 0-180 81-180 180s81 180 180 180c92 0 167-70 178-160h-58z" fill="#f59e0b" />
+                  <path
+                    d="M380 220c0 55-45 100-100 100s-100-45-100-100 45-100 100-100c28 0 54 11 73 30l47-47c-30-30-73-47-120-47-99 0-180 81-180 180s81 180 180 180c92 0 167-70 178-160h-58z"
+                    fill="#f59e0b" />
                   <circle cx="280" cy="220" r="44" fill="#f59e0b" />
                 </svg>
               </div>
@@ -1103,7 +1148,9 @@
               <div class="software-icon">
                 <svg viewBox="0 0 512 512" fill="none">
                   <rect width="512" height="512" rx="64" fill="#182200" />
-                  <path d="M120 144h68c34 0 58 18 58 48s-24 48-58 48h-28v116h-40V144zm40 64h24c12 0 20-6 20-16s-8-16-20-16h-24v32zM260 144h40l28 116 28-116h40l-48 184h-40l-48-184z" fill="#bcff12" />
+                  <path
+                    d="M120 144h68c34 0 58 18 58 48s-24 48-58 48h-28v116h-40V144zm40 64h24c12 0 20-6 20-16s-8-16-20-16h-24v32zM260 144h40l28 116 28-116h40l-48 184h-40l-48-184z"
+                    fill="#bcff12" />
                 </svg>
               </div>
               <div class="software-info">
@@ -1118,7 +1165,9 @@
               <div class="software-icon">
                 <svg viewBox="0 0 512 512" fill="none">
                   <rect width="512" height="512" rx="64" fill="#2d1c01" />
-                  <path d="M120 160h110c28 0 46 16 46 44s-18 44-46 44h-70v84h-40V160zm40 40v32h66c6 0 12-4 12-16s-6-16-12-16h-66zM280 200l28 32-28 100h40l18-72h48l18 72h40l-28-132h-40l-18 40-18-40h-32z" fill="#fbbf24" />
+                  <path
+                    d="M120 160h110c28 0 46 16 46 44s-18 44-46 44h-70v84h-40V160zm40 40v32h66c6 0 12-4 12-16s-6-16-12-16h-66zM280 200l28 32-28 100h40l18-72h48l18 72h40l-28-132h-40l-18 40-18-40h-32z"
+                    fill="#fbbf24" />
                 </svg>
               </div>
               <div class="software-info">
@@ -1133,7 +1182,9 @@
               <div class="software-icon">
                 <svg viewBox="0 0 512 512" fill="none">
                   <rect width="512" height="512" rx="64" fill="#260f38" />
-                  <path d="M120 160h88c28 0 48 18 48 48s-20 48-48 48h-48v72h-40V160zm40 40v36h44c6 0 12-4 12-18s-6-18-12-18h-44zm115-40h110v40h-70v36h60v40h-60v76h-40V160z" fill="#a78bfa" />
+                  <path
+                    d="M120 160h88c28 0 48 18 48 48s-20 48-48 48h-48v72h-40V160zm40 40v36h44c6 0 12-4 12-18s-6-18-12-18h-44zm115-40h110v40h-70v36h60v40h-60v76h-40V160z"
+                    fill="#a78bfa" />
                 </svg>
               </div>
               <div class="software-info">
@@ -1164,7 +1215,9 @@
               <div class="software-icon">
                 <svg viewBox="0 0 512 512" fill="none">
                   <rect width="512" height="512" rx="64" fill="#061d36" />
-                  <path d="M120 144h44l40 100 40-100h44v184h-40V196l-32 80h-24l-32-80v132h-40V144zm180 144c0 24 16 44 44 44s44-20 44-44V144h40v144c0 38-30 68-76 68s-76-30-76-68V144h24v144z" fill="#00a2ff" />
+                  <path
+                    d="M120 144h44l40 100 40-100h44v184h-40V196l-32 80h-24l-32-80v132h-40V144zm180 144c0 24 16 44 44 44s44-20 44-44V144h40v144c0 38-30 68-76 68s-76-30-76-68V144h24v144z"
+                    fill="#00a2ff" />
                 </svg>
               </div>
               <div class="software-info">
@@ -1227,7 +1280,9 @@
               <div class="custom-dropdown" id="custom-dropdown-container">
                 <div class="custom-dropdown-trigger hovering-link-target" id="custom-dropdown-trigger">
                   <span class="trigger-text">Select / Choose</span>
-                  <svg viewBox="0 0 24 24" class="trigger-arrow"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  <svg viewBox="0 0 24 24" class="trigger-arrow">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
                 </div>
                 <div class="custom-dropdown-menu" id="custom-dropdown-menu">
                   <label class="custom-dropdown-item hovering-link-target">
@@ -1296,7 +1351,9 @@
             <a href="tel:+919001055339" class="contact-channel-item hovering-link-target">
               <div class="channel-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                  </path>
                 </svg>
               </div>
               <div class="channel-details">
@@ -1353,15 +1410,19 @@
       <ul class="social-links">
         <!-- WhatsApp -->
         <li>
-          <a href="https://wa.me/919001055339" target="_blank" class="social-link hovering-link-target" aria-label="WhatsApp Channel">
+          <a href="https://wa.me/919001055339" target="_blank" class="social-link hovering-link-target"
+            aria-label="WhatsApp Channel">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+              <path
+                d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+              </path>
             </svg>
           </a>
         </li>
         <!-- Instagram -->
         <li>
-          <a href="https://www.instagram.com/digi18studio/" target="_blank" class="social-link hovering-link-target" aria-label="Instagram Profile">
+          <a href="https://www.instagram.com/digi18studio/" target="_blank" class="social-link hovering-link-target"
+            aria-label="Instagram Profile">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
               <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
@@ -1371,7 +1432,8 @@
         </li>
         <!-- Facebook -->
         <li>
-          <a href="https://facebook.com" target="_blank" class="social-link hovering-link-target" aria-label="Facebook Profile">
+          <a href="https://facebook.com" target="_blank" class="social-link hovering-link-target"
+            aria-label="Facebook Profile">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
             </svg>
@@ -1379,11 +1441,13 @@
         </li>
         <!-- Website -->
         <li>
-          <a href="https://digi18studio.github.io/digi18_website/index.html" target="_blank" class="social-link hovering-link-target" aria-label="Digi18 Website">
+          <a href="https://digi18studio.github.io/digi18_website/index.html" target="_blank"
+            class="social-link hovering-link-target" aria-label="Digi18 Website">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="10"></circle>
               <line x1="2" y1="12" x2="22" y2="12"></line>
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+              </path>
             </svg>
           </a>
         </li>
@@ -1398,9 +1462,12 @@
         </li>
         <!-- Threads -->
         <li>
-          <a href="https://threads.net" target="_blank" class="social-link hovering-link-target" aria-label="Threads Profile">
+          <a href="https://threads.net" target="_blank" class="social-link hovering-link-target"
+            aria-label="Threads Profile">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.82 12.83a3.5 3.5 0 0 1-4.64.44l-.24-.2a4.4 4.4 0 0 0-1.8-1 4.54 4.54 0 0 1 2.37-7.79 4.38 4.38 0 0 1 3.5 1.54 1 1 0 0 0 1.54-1.28A6.38 6.38 0 0 0 11.5 4.54 6.54 6.54 0 0 0 8.08 15.7a6.38 6.38 0 0 0 3 .8c1.32 0 2.58-.46 3.58-1.32a1 1 0 1 0-1.34-1.5z"></path>
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.82 12.83a3.5 3.5 0 0 1-4.64.44l-.24-.2a4.4 4.4 0 0 0-1.8-1 4.54 4.54 0 0 1 2.37-7.79 4.38 4.38 0 0 1 3.5 1.54 1 1 0 0 0 1.54-1.28A6.38 6.38 0 0 0 11.5 4.54 6.54 6.54 0 0 0 8.08 15.7a6.38 6.38 0 0 0 3 .8c1.32 0 2.58-.46 3.58-1.32a1 1 0 1 0-1.34-1.5z">
+              </path>
             </svg>
           </a>
         </li>
