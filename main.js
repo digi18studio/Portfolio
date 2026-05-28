@@ -172,13 +172,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================================================
   const projectDatabase = {
     "1": {
-      title: "UI/UX Design",
+      title: "Graphic Design",
       category: "Service Scope",
       image: "assets/ui_ux_design.png",
-      deliverables: "Mobile Apps, Web Dashboards, Wireframes, Interactive Prototypes, User Journeys, Design Systems",
+      deliverables: "Brand Identity, Marketing Materials, Social Media Graphics, Vector Illustrations, Digital Assets",
       client: "Creative Art Collective",
-      desc1: "Designing intuitive, pixel-perfect user interfaces and highly engaging web & mobile application experiences structured for modern conversions.",
-      desc2: "Structured layouts prioritize dynamic usability grids, glassmorphism panel styling, and consistent components to maximize aesthetic value and product conversions."
+      desc1: "Crafting beautiful, high-impact graphic designs, brand assets, and creative visual communications that define unique brand personalities.",
+      desc2: "Our custom graphics focus on balanced grids, professional typography, and vibrant color schemes that resonate with audiences across print and digital media."
     },
     "2": {
       title: "Branding & Packaging",
@@ -305,39 +305,103 @@ document.addEventListener('DOMContentLoaded', () => {
   // Re-run hover effects so the new header elements register interactive cursor reactions
   addHoverEffects();
 
-  // Helper function to dynamically generate the 12-bento staggered grid of gray placeholder work showcases
-  const getBentoGalleryHTML = () => {
+  // Google Drive URL to high-speed CDN direct link converter functions
+  const getDirectDriveImgLink = (url) => {
+    if (!url) return '';
+    if (url.includes('drive.google.com')) {
+      const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+      if (match && match[1]) {
+        const fileId = match[1];
+        // 100% reliable, high-speed CDN hotlink served by Google
+        return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
+      }
+    }
+    return url;
+  };
+
+  const getDirectDriveVideoLink = (url) => {
+    if (!url) return '';
+    if (url.includes('drive.google.com')) {
+      const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+      if (match && match[1]) {
+        const fileId = match[1];
+        return `https://drive.google.com/uc?export=download&id=${fileId}`;
+      }
+    }
+    return url;
+  };
+
+  // Helper function to dynamically generate the 12-bento staggered grid of work showcases
+  const getBentoGalleryHTML = (projectId, mainImage) => {
     const bentoLayouts = [
-      { cls: 'span-col-2 span-row-2', lbl: 'Creative Composition #1', aspect: '1000x1000' },
+      { cls: 'span-col-2 span-row-2', lbl: 'Creative Composition #1', aspect: '1000x1000', useImage: true },
       { cls: '', lbl: 'Draft Frame #2', aspect: '1000x1000' },
-      { cls: 'span-row-2', lbl: 'Editorial Concept #3', aspect: '1080x1920' },
-      { cls: 'span-col-2', lbl: 'Visual Interface #4', aspect: '1920x1080' },
+      { cls: 'span-row-2', lbl: 'Editorial Concept #3', aspect: '1080x1920', useImage: true },
+      { cls: 'span-col-2', lbl: 'Visual Interface #4', aspect: '1920x1080', useImage: true },
       { cls: '', lbl: 'Dynamic Element #5', aspect: '1000x1000' },
       { cls: 'span-row-2', lbl: 'Cinematic Mockup #6', aspect: '1080x1920' },
-      { cls: 'span-col-2 span-row-2', lbl: 'Featured Project #7', aspect: '1000x1000' },
+      { cls: 'span-col-2 span-row-2', lbl: 'Featured Project #7', aspect: '1000x1000', useImage: true },
       { cls: '', lbl: 'Branding Frame #8', aspect: '1000x1000' },
       { cls: 'span-col-2', lbl: 'Interface Layout #9', aspect: '1920x1080' },
       { cls: '', lbl: 'Aesthetic Concept #10', aspect: '1000x1000' },
       { cls: 'span-row-2', lbl: 'Design Spread #11', aspect: '1080x1920' },
-      { cls: 'span-col-2', lbl: 'Interactive System #12', aspect: '1920x1080' }
+      { cls: 'span-col-2', lbl: 'Interactive System #12', aspect: '1920x1080', useImage: true }
     ];
 
+    // Testing list containing all 11 Google Drive images we extracted
+    const driveTestImages = [
+      "https://drive.google.com/file/d/1yyoLGitlxXyBqfOr3ava89eyvms-3wPQ/view?usp=sharing", // design.png
+      "https://drive.google.com/file/d/1_sYjKqFbzZXKMWP_vExm39UUAyhNxAbW/view?usp=sharing", // branding.jpg
+      "https://drive.google.com/file/d/1z6jBYZhohMnvzVxPPAprdGlMIyQfY5uI/view?usp=sharing", // wedding shoot.webp
+      "https://drive.google.com/file/d/1MGHadaRxwrFlUY02R0H5GnaMLUpepVYR/view?usp=sharing", // invitation.jpg
+      "https://drive.google.com/file/d/1dFEaNZZaO1HF9GLHzS3vR20vwfzb-7sZ/view?usp=sharing", // youtube.png
+      "https://drive.google.com/file/d/1Q8T9j7VEIZ7KUJxNZoEf67EvGvCGa02O/view?usp=sharing", // instagram.jpg
+      "https://drive.google.com/file/d/1J_6HhgubY_vrGN4bOGzw3YkSKWLdXz9R/view?usp=sharing", // web.jpg
+      "https://drive.google.com/file/d/1fbVAFVOx7wOkUZBd_ATxhFJiCD3b7Wbj/view?usp=sharing", // primt-media.jpg
+      "https://drive.google.com/file/d/1QT0YTToHbMgO1q1y3H9lmsFwOB77yhyK/view?usp=sharing", // ui designer.jpg
+      "https://drive.google.com/file/d/1dE8BifajBucHXAwqN3JgvcxhmqeyD9kq/view?usp=sharing", // logo-design.jpg
+      "https://drive.google.com/file/d/165-z9cNeStSICOVkVmg3wYUSbP3s0h_M/view?usp=sharing"  // product photography.jpg
+    ];
+
+    const isGraphicDesignTest = projectId === "1" || projectId === 1;
+
     let bentoHTML = '';
-    bentoLayouts.forEach((item) => {
-      bentoHTML += `
-        <div class="detail-bento-card ${item.cls}">
-          <div class="detail-bento-card-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="9" y1="3" x2="9" y2="21"></line>
-            </svg>
+    bentoLayouts.forEach((item, index) => {
+      let displayImg = '';
+      if (isGraphicDesignTest) {
+        // Map a different Google Drive test image to every bento card dynamically
+        const imgUrl = driveTestImages[index % driveTestImages.length];
+        displayImg = getDirectDriveImgLink(imgUrl);
+      } else {
+        displayImg = item.useImage && mainImage ? mainImage : '';
+      }
+
+      if (displayImg) {
+        bentoHTML += `
+          <div class="detail-bento-card ${item.cls} has-image" style="background-image: url('${displayImg}'); background-size: cover; background-position: center;">
+            <div class="bento-image-overlay"></div>
+            <div class="detail-bento-card-info">
+              <h4>${item.lbl}</h4>
+              <p>${item.aspect}</p>
+            </div>
           </div>
-          <div class="detail-bento-card-info">
-            <h4>${item.lbl}</h4>
-            <p>${item.aspect}</p>
+        `;
+      } else {
+        bentoHTML += `
+          <div class="detail-bento-card ${item.cls}">
+            <div class="detail-bento-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="9" y1="3" x2="9" y2="21"></line>
+              </svg>
+            </div>
+            <div class="detail-bento-card-info">
+              <h4>${item.lbl}</h4>
+              <p>${item.aspect}</p>
+            </div>
           </div>
-        </div>
-      `;
+        `;
+      }
     });
     return bentoHTML;
   };
@@ -359,10 +423,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!body) {
         body = document.createElement('div');
         body.className = 'portfolio-card-body';
+        const directImgUrl = getDirectDriveImgLink(data.image);
         body.innerHTML = `
           <div class="detail-side-by-side">
             <div class="detail-media-panel">
-              <img src="${data.image}" alt="${data.title}">
+              <img src="${directImgUrl}" alt="${data.title}">
             </div>
             <div class="detail-info-panel">
               <div class="detail-meta-group">
@@ -388,7 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="detail-work-gallery">
             <h4 class="gallery-title">Work Gallery & Deliverables</h4>
             <div class="detail-bento-grid">
-              ${getBentoGalleryHTML()}
+              ${getBentoGalleryHTML(projectId, directImgUrl)}
             </div>
           </div>
         `;
@@ -886,245 +951,251 @@ document.addEventListener('DOMContentLoaded', () => {
   const heroSection = document.getElementById('home');
 
   if (canvas && heroSection) {
-    const ctx = canvas.getContext('2d');
-    let particlesArray = [];
-    const maxParticles = 125; // Rich particle density
-    
-    // Mouse properties relative to hero section bounds
-    let mouse = {
-      x: null,
-      y: null,
-      radius: 155, // Adjusted magnetic radius to exactly 155px as requested
-      active: false
-    };
+    // Check if the viewport is mobile/tablet to completely disable particles & canvas engine
+    const isMobile = window.matchMedia('(max-width: 1024px), (pointer: coarse)').matches;
+    if (isMobile) {
+      canvas.style.display = 'none';
+    } else {
+      const ctx = canvas.getContext('2d');
+      let particlesArray = [];
+      const maxParticles = 125; // Rich particle density
+      
+      // Mouse properties relative to hero section bounds
+      let mouse = {
+        x: null,
+        y: null,
+        radius: 155, // Adjusted magnetic radius to exactly 155px as requested
+        active: false
+      };
 
-    // Gyroscope tilt gravity offsets
-    let gravityOffset = {
-      x: 0,
-      y: 0
-    };
+      // Gyroscope tilt gravity offsets
+      let gravityOffset = {
+        x: 0,
+        y: 0
+      };
 
-    // Resize handler
-    function resizeCanvas() {
-      const rect = heroSection.getBoundingClientRect();
-      canvas.width = rect.width;
-      canvas.height = rect.height;
-    }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+      // Resize handler
+      function resizeCanvas() {
+        const rect = heroSection.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
 
-    // Track mouse coordinates on parent container (for Desktop/Laptop hover)
-    heroSection.addEventListener('mousemove', (e) => {
-      const rect = heroSection.getBoundingClientRect();
-      mouse.x = e.clientX - rect.left;
-      mouse.y = e.clientY - rect.top;
-      mouse.active = true;
-    });
-
-    heroSection.addEventListener('mouseleave', () => {
-      mouse.active = false;
-      mouse.x = null;
-      mouse.y = null;
-    });
-
-    // Touch support for Mobile/Tablet touchscreens (Finger touch, tap, hold, and glide)
-    heroSection.addEventListener('touchstart', (e) => {
-      const rect = heroSection.getBoundingClientRect();
-      if (e.touches && e.touches.length > 0) {
-        mouse.x = e.touches[0].clientX - rect.left;
-        mouse.y = e.touches[0].clientY - rect.top;
+      // Track mouse coordinates on parent container (for Desktop/Laptop hover)
+      heroSection.addEventListener('mousemove', (e) => {
+        const rect = heroSection.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
         mouse.active = true;
-      }
-    }, { passive: true });
+      });
 
-    heroSection.addEventListener('touchmove', (e) => {
-      const rect = heroSection.getBoundingClientRect();
-      if (e.touches && e.touches.length > 0) {
-        mouse.x = e.touches[0].clientX - rect.left;
-        mouse.y = e.touches[0].clientY - rect.top;
-        mouse.active = true;
-      }
-    }, { passive: true });
+      heroSection.addEventListener('mouseleave', () => {
+        mouse.active = false;
+        mouse.x = null;
+        mouse.y = null;
+      });
 
-    heroSection.addEventListener('touchend', () => {
-      mouse.active = false;
-      mouse.x = null;
-      mouse.y = null;
-    });
+      // Touch support for Mobile/Tablet touchscreens (Finger touch, tap, hold, and glide)
+      heroSection.addEventListener('touchstart', (e) => {
+        const rect = heroSection.getBoundingClientRect();
+        if (e.touches && e.touches.length > 0) {
+          mouse.x = e.touches[0].clientX - rect.left;
+          mouse.y = e.touches[0].clientY - rect.top;
+          mouse.active = true;
+        }
+      }, { passive: true });
 
-    heroSection.addEventListener('touchcancel', () => {
-      mouse.active = false;
-      mouse.x = null;
-      mouse.y = null;
-    });
+      heroSection.addEventListener('touchmove', (e) => {
+        const rect = heroSection.getBoundingClientRect();
+        if (e.touches && e.touches.length > 0) {
+          mouse.x = e.touches[0].clientX - rect.left;
+          mouse.y = e.touches[0].clientY - rect.top;
+          mouse.active = true;
+        }
+      }, { passive: true });
 
-    // Device orientation gyroscope handler (for mobile devices)
-    window.addEventListener('deviceorientation', (event) => {
-      if (event.gamma !== null && event.beta !== null) {
-        gravityOffset.x = Math.max(Math.min(event.gamma * 0.08, 3), -3);
-        gravityOffset.y = Math.max(Math.min((event.beta - 45) * 0.08, 3), -3);
-      }
-    });
+      heroSection.addEventListener('touchend', () => {
+        mouse.active = false;
+        mouse.x = null;
+        mouse.y = null;
+      });
 
-    // Particle Object Blueprint
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.baseX = this.x; // Anchored home X coordinate for instant spring-back
-        this.baseY = this.y; // Anchored home Y coordinate for instant spring-back
-        this.vx = 0;
-        this.vy = 0;
-        this.size = Math.random() * 2 + 1.2; // premium delicate particle sizes
-      }
+      heroSection.addEventListener('touchcancel', () => {
+        mouse.active = false;
+        mouse.x = null;
+        mouse.y = null;
+      });
 
-      // Update positions, velocity vectors, and gravity influences
-      update() {
-        // Shift particle velocity by gyroscope tilt gravity (if mobile)
-        this.vx += gravityOffset.x * 0.012;
-        this.vy += gravityOffset.y * 0.012;
+      // Device orientation gyroscope handler (for mobile devices)
+      window.addEventListener('deviceorientation', (event) => {
+        if (event.gamma !== null && event.beta !== null) {
+          gravityOffset.x = Math.max(Math.min(event.gamma * 0.08, 3), -3);
+          gravityOffset.y = Math.max(Math.min((event.beta - 45) * 0.08, 3), -3);
+        }
+      });
 
-        // Calculate distance to original anchored home position
-        const homeDx = this.baseX - this.x;
-        const homeDy = this.baseY - this.y;
+      // Particle Object Blueprint
+      class Particle {
+        constructor() {
+          this.x = Math.random() * canvas.width;
+          this.y = Math.random() * canvas.height;
+          this.baseX = this.x; // Anchored home X coordinate for instant spring-back
+          this.baseY = this.y; // Anchored home Y coordinate for instant spring-back
+          this.vx = 0;
+          this.vy = 0;
+          this.size = Math.random() * 2 + 1.2; // premium delicate particle sizes
+        }
 
-        // ELASTIC HOME SPRING RESTORATION FORCE:
-        // Automatically pulls the particles back to their original home spots instantly.
-        // The spring coefficient (0.08) and damping (0.82) create a beautiful subtle bounce.
-        this.vx += homeDx * 0.08;
-        this.vy += homeDy * 0.08;
+        // Update positions, velocity vectors, and gravity influences
+        update() {
+          // Shift particle velocity by gyroscope tilt gravity (if mobile)
+          this.vx += gravityOffset.x * 0.012;
+          this.vy += gravityOffset.y * 0.012;
 
-        // Friction damping (settles dots exactly at home without infinite oscillation)
-        this.vx *= 0.82;
-        this.vy *= 0.82;
+          // Calculate distance to original anchored home position
+          const homeDx = this.baseX - this.x;
+          const homeDy = this.baseY - this.y;
 
-        // Apply velocity to coordinates
-        this.x += this.vx;
-        this.y += this.vy;
+          // ELASTIC HOME SPRING RESTORATION FORCE:
+          // Automatically pulls the particles back to their original home spots instantly.
+          // The spring coefficient (0.08) and damping (0.82) create a beautiful subtle bounce.
+          this.vx += homeDx * 0.08;
+          this.vy += homeDy * 0.08;
 
-        // Desktop mouse attraction / gravity pull
-        if (mouse.active && mouse.x !== null && mouse.y !== null) {
-          const dx = mouse.x - this.x;
-          const dy = mouse.y - this.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          
-          if (dist < mouse.radius) {
-            const force = (mouse.radius - dist) / mouse.radius;
+          // Friction damping (settles dots exactly at home without infinite oscillation)
+          this.vx *= 0.82;
+          this.vy *= 0.82;
+
+          // Apply velocity to coordinates
+          this.x += this.vx;
+          this.y += this.vy;
+
+          // Desktop mouse attraction / gravity pull
+          if (mouse.active && mouse.x !== null && mouse.y !== null) {
+            const dx = mouse.x - this.x;
+            const dy = mouse.y - this.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
             
-            // MOUSE INFLUENCE (Temporarily distorts the mesh by overriding spring pull):
-            // 1. Pull towards the mouse using velocity (42px to 155px)
-            // 2. Repel strongly under 42px to prevent overlapping clumps
-            if (dist > 42) {
-              this.vx += (dx / dist) * force * 1.5;
-              this.vy += (dy / dist) * force * 1.5;
-            } else {
-              const repelForce = (42 - dist) / 42;
-              this.vx -= (dx / dist) * repelForce * 2.2;
-              this.vy -= (dy / dist) * repelForce * 2.2;
+            if (dist < mouse.radius) {
+              const force = (mouse.radius - dist) / mouse.radius;
+              
+              // MOUSE INFLUENCE (Temporarily distorts the mesh by overriding spring pull):
+              // 1. Pull towards the mouse using velocity (42px to 155px)
+              // 2. Repel strongly under 42px to prevent overlapping clumps
+              if (dist > 42) {
+                this.vx += (dx / dist) * force * 1.5;
+                this.vy += (dy / dist) * force * 1.5;
+              } else {
+                const repelForce = (42 - dist) / 42;
+                this.vx -= (dx / dist) * repelForce * 2.2;
+                this.vy -= (dy / dist) * repelForce * 2.2;
+              }
+            }
+          }
+        }
+
+        draw() {
+          const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+          // ADJUSTED OPACITY FOR PERFECT BALANCE:
+          // 1. Light mode: 100% solid, fully opaque white (1.0) so it stands out strongly on the light off-white background
+          // 2. Dark mode: tuned to exactly 0.25 for an ultra-subtle, premium starry background as requested
+          const particleColor = isLight ? 'rgba(255, 255, 255, 1.0)' : 'rgba(255, 255, 255, 0.25)';
+          
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fillStyle = particleColor;
+          ctx.fill();
+        }
+      }
+
+      // Populate particles arrays
+      function initParticles() {
+        particlesArray = [];
+        for (let i = 0; i < maxParticles; i++) {
+          particlesArray.push(new Particle());
+        }
+      }
+      initParticles();
+
+      // Re-initialize particles on resizing canvas to ensure equal density
+      window.addEventListener('resize', () => {
+        initParticles();
+      });
+
+      // Draw thin elegant connecting line webs between nearby particles
+      function connectParticles() {
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        const connectionDist = 80;
+
+        for (let a = 0; a < particlesArray.length; a++) {
+          for (let b = a + 1; b < particlesArray.length; b++) {
+            const dx = particlesArray[a].x - particlesArray[b].x;
+            const dy = particlesArray[a].y - particlesArray[b].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < connectionDist) {
+              // WHITE CONNECTING WEBS:
+              // 1. Light mode: 100% solid white (1.0)
+              // 2. Dark mode: tuned to exactly 0.20 for a whisper-soft delicate mesh as requested
+              const baseAlpha = isLight ? 1.0 : 0.20;
+              const alpha = (1 - (dist / connectionDist)) * baseAlpha;
+              ctx.beginPath();
+              ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+              ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+              ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+              ctx.lineWidth = isLight ? 1.5 : 0.85; // Thicker in light mode to stand out beautifully on light background
+              ctx.stroke();
+            }
+          }
+
+          // Draw connections to the mouse cursor (creating attraction visual webs)
+          if (mouse.active && mouse.x !== null && mouse.y !== null) {
+            const mdx = particlesArray[a].x - mouse.x;
+            const mdy = particlesArray[a].y - mouse.y;
+            const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+
+            if (mdist < mouse.radius) {
+              // WHITE MOUSE THREADS:
+              // 1. Light mode: 100% solid white (1.0)
+              // 2. Dark mode: tuned to exactly 0.25 as requested
+              const baseMouseAlpha = isLight ? 1.0 : 0.25;
+              const malpha = (1 - (mdist / mouse.radius)) * baseMouseAlpha;
+              ctx.beginPath();
+              ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+              ctx.lineTo(mouse.x, mouse.y);
+              ctx.strokeStyle = `rgba(255, 255, 255, ${malpha})`;
+              ctx.lineWidth = isLight ? 1.8 : 0.95; // Thicker in light mode to be highly visible
+              ctx.stroke();
             }
           }
         }
       }
 
-      draw() {
+      // Butttery 60FPS animation loop
+      function animateParticles() {
         const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-        // ADJUSTED OPACITY FOR PERFECT BALANCE:
-        // 1. Light mode: 100% solid, fully opaque white (1.0) so it stands out strongly on the light off-white background
-        // 2. Dark mode: tuned to exactly 0.25 for an ultra-subtle, premium starry background as requested
-        const particleColor = isLight ? 'rgba(255, 255, 255, 1.0)' : 'rgba(255, 255, 255, 0.25)';
         
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = particleColor;
-        ctx.fill();
-      }
-    }
-
-    // Populate particles arrays
-    function initParticles() {
-      particlesArray = [];
-      for (let i = 0; i < maxParticles; i++) {
-        particlesArray.push(new Particle());
-      }
-    }
-    initParticles();
-
-    // Re-initialize particles on resizing canvas to ensure equal density
-    window.addEventListener('resize', () => {
-      initParticles();
-    });
-
-    // Draw thin elegant connecting line webs between nearby particles
-    function connectParticles() {
-      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-      const connectionDist = 80;
-
-      for (let a = 0; a < particlesArray.length; a++) {
-        for (let b = a + 1; b < particlesArray.length; b++) {
-          const dx = particlesArray[a].x - particlesArray[b].x;
-          const dy = particlesArray[a].y - particlesArray[b].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < connectionDist) {
-            // WHITE CONNECTING WEBS:
-            // 1. Light mode: 100% solid white (1.0)
-            // 2. Dark mode: tuned to exactly 0.20 for a whisper-soft delicate mesh as requested
-            const baseAlpha = isLight ? 1.0 : 0.20;
-            const alpha = (1 - (dist / connectionDist)) * baseAlpha;
-            ctx.beginPath();
-            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-            ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-            ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
-            ctx.lineWidth = isLight ? 1.5 : 0.85; // Thicker in light mode to stand out beautifully on light background
-            ctx.stroke();
-          }
+        // PERFORMANCE BOOST: Disable updates and drawing entirely in light theme to save CPU/GPU cycles
+        if (isLight) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          requestAnimationFrame(animateParticles);
+          return;
         }
-
-        // Draw connections to the mouse cursor (creating attraction visual webs)
-        if (mouse.active && mouse.x !== null && mouse.y !== null) {
-          const mdx = particlesArray[a].x - mouse.x;
-          const mdy = particlesArray[a].y - mouse.y;
-          const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
-
-          if (mdist < mouse.radius) {
-            // WHITE MOUSE THREADS:
-            // 1. Light mode: 100% solid white (1.0)
-            // 2. Dark mode: tuned to exactly 0.25 as requested
-            const baseMouseAlpha = isLight ? 1.0 : 0.25;
-            const malpha = (1 - (mdist / mouse.radius)) * baseMouseAlpha;
-            ctx.beginPath();
-            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-            ctx.lineTo(mouse.x, mouse.y);
-            ctx.strokeStyle = `rgba(255, 255, 255, ${malpha})`;
-            ctx.lineWidth = isLight ? 1.8 : 0.95; // Thicker in light mode to be highly visible
-            ctx.stroke();
-          }
-        }
-      }
-    }
-
-    // Butttery 60FPS animation loop
-    function animateParticles() {
-      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-      
-      // PERFORMANCE BOOST: Disable updates and drawing entirely in light theme to save CPU/GPU cycles
-      if (isLight) {
+        
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        for (let i = 0; i < particlesArray.length; i++) {
+          particlesArray[i].update();
+          particlesArray[i].draw();
+        }
+        
+        connectParticles();
         requestAnimationFrame(animateParticles);
-        return;
       }
-      
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      for (let i = 0; i < particlesArray.length; i++) {
-        particlesArray[i].update();
-        particlesArray[i].draw();
-      }
-      
-      connectParticles();
-      requestAnimationFrame(animateParticles);
+      animateParticles();
     }
-    animateParticles();
   }
 
   // ==========================================================================
