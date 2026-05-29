@@ -1549,11 +1549,16 @@
   <!-- FULLSCREEN IMAGE LIGHTBOX GALLERY VIEW -->
   <div class="lightbox-overlay" id="gallery-lightbox">
     <button class="lightbox-close-btn hovering-link-target" id="lightbox-close" aria-label="Close viewer">&times;</button>
-    <button class="lightbox-nav-btn prev-btn hovering-link-target" id="lightbox-prev" aria-label="Previous photo">&#10094;</button>
-    <div class="lightbox-image-container">
+    
+    <div class="lightbox-image-container" id="lightbox-container">
       <img class="lightbox-active-img" id="lightbox-img" src="" alt="Enlarged view">
     </div>
-    <button class="lightbox-nav-btn next-btn hovering-link-target" id="lightbox-next" aria-label="Next photo">&#10095;</button>
+    
+    <!-- Bottom center navigation dock -->
+    <div class="lightbox-bottom-nav">
+      <button class="lightbox-bottom-btn hovering-link-target" id="lightbox-prev" aria-label="Previous photo">&#10094;</button>
+      <button class="lightbox-bottom-btn hovering-link-target" id="lightbox-next" aria-label="Next photo">&#10095;</button>
+    </div>
   </div>
 
   <!-- External Script -->

@@ -803,12 +803,14 @@ document.addEventListener('DOMContentLoaded', () => {
       
       if (isFlipped) {
         // FLIPPING TO ORBIT MODE
+        heroScene.classList.add('orbit-mode-active');
         // Temporarily pause floaters to keep transitions smooth
         document.querySelectorAll('.floating-box').forEach(box => {
           box.classList.remove('floater-ready');
         });
       } else {
         // FLIPPING BACK TO STANDARD MODE
+        heroScene.classList.remove('orbit-mode-active');
         // Stagger re-enabling float loops after card finishes flipping back (850ms)
         setTimeout(() => {
           document.querySelectorAll('.floating-box').forEach(box => {
@@ -862,12 +864,19 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================================================
 
   // Check and hide custom cursor elements on mobile/touch screens
-  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+  const isTouchDevice = ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+  if (isTouchDevice) {
     const customCursor = document.getElementById('custom-cursor');
     const customFollower = document.getElementById('custom-cursor-follower');
     if (customCursor) customCursor.style.display = 'none';
     if (customFollower) customFollower.style.display = 'none';
     document.body.classList.add('touch-device');
+  }
+
+  // Detect mobile device requesting Desktop Site
+  const isMobileDesktopSite = isTouchDevice && window.innerWidth >= 980 && window.innerWidth <= 1300;
+  if (isMobileDesktopSite) {
+    document.body.classList.add('mobile-desktop-site');
   }
 
   // Setup loop and drag-scroll on marquee containers
@@ -1310,7 +1319,7 @@ document.addEventListener('DOMContentLoaded', () => {
   sections.forEach(section => scrollspyObserver.observe(section));
 
   // ==========================================================================
-  // 15. FULLSCREEN GALLERY IMAGE LIGHTBOX WITH DRAG/SWIPE & DOUBLE-TAP ZOOM
+  // 15. FULLSCREEN GALLERY IMAGE LIGHTBOX WITH DRAG/PAN & DOUBLE-TAP ZOOM
   // ==========================================================================
   const bentoGrid = document.getElementById('modal-bento-grid');
   const lightbox = document.getElementById('gallery-lightbox');
@@ -1321,6 +1330,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let activeGalleryImages = [];
   let currentImgIndex = 0;
+
+  // Panning/dragging coordinates
+  let isPanning = false;
+  let startPanX = 0, startPanY = 0;
+  let panX = 0, panY = 0;
 
   if (bentoGrid && lightbox && lightboxImg) {
     bentoGrid.addEventListener('click', (e) => {
@@ -1348,8 +1362,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (index < 0 || index >= activeGalleryImages.length) return;
       currentImgIndex = index;
 
-      lightboxImg.src = activeGalleryImages[currentImgIndex];
+      // Reset panning
+      panX = 0;
+      panY = 0;
+      lightboxImg.style.transform = '';
       lightboxImg.classList.remove('zoomed'); // Reset zoom state
+
+      lightboxImg.src = activeGalleryImages[currentImgIndex];
 
       lightbox.classList.add('active');
       
@@ -1365,6 +1384,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const closeLightbox = () => {
       lightbox.classList.remove('active');
+      panX = 0;
+      panY = 0;
+      lightboxImg.style.transform = '';
       setTimeout(() => {
         if (!lightbox.classList.contains('active')) {
           lightboxImg.src = '';
@@ -1430,7 +1452,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastTap = 0;
     const handleZoomToggle = (e) => {
       e.preventDefault();
-      lightboxImg.classList.toggle('zoomed');
+      const isZoomed = lightboxImg.classList.toggle('zoomed');
+      panX = 0;
+      panY = 0;
+      if (isZoomed) {
+        lightboxImg.style.transform = 'scale(2) translate(0px, 0px)';
+      } else {
+        lightboxImg.style.transform = 'scale(1) translate(0px, 0px)';
+      }
     };
 
     lightboxImg.addEventListener('dblclick', handleZoomToggle);
@@ -1445,61 +1474,68 @@ document.addEventListener('DOMContentLoaded', () => {
       lastTap = currentTime;
     });
 
-    // 2. Swipe Slide support (touch and mouse drag)
-    let startSwipeX = 0;
-    let distSwipeX = 0;
-    let isSwiping = false;
-
-    // Mouse drag swipe
+    // 2. Drag & Touch Panning Logic
     lightboxImg.addEventListener('mousedown', (e) => {
+      if (!lightboxImg.classList.contains('zoomed')) return;
       e.preventDefault();
-      startSwipeX = e.clientX;
-      isSwiping = true;
+      isPanning = true;
+      startPanX = e.clientX - panX;
+      startPanY = e.clientY - panY;
+      lightboxImg.style.cursor = 'grabbing';
+      lightboxImg.style.transition = 'none'; // disable transitions while dragging for instant feedback
     });
 
     window.addEventListener('mousemove', (e) => {
-      if (!isSwiping) return;
-      distSwipeX = e.clientX - startSwipeX;
+      if (!isPanning) return;
+      panX = e.clientX - startPanX;
+      panY = e.clientY - startPanY;
+
+      // Clamp bounds dynamically based on half image width/height (approximate boundary)
+      const maxPanX = Math.max(150, lightboxImg.offsetWidth / 2);
+      const maxPanY = Math.max(150, lightboxImg.offsetHeight / 2);
+      panX = Math.max(Math.min(panX, maxPanX), -maxPanX);
+      panY = Math.max(Math.min(panY, maxPanY), -maxPanY);
+
+      lightboxImg.style.transform = `scale(2) translate(${panX / 2}px, ${panY / 2}px)`; // translate is applied relative to scaling
     });
 
-    window.addEventListener('mouseup', (e) => {
-      if (!isSwiping) return;
-      isSwiping = false;
-      // Swipe threshold check
-      if (Math.abs(distSwipeX) > 80) {
-        if (distSwipeX > 0) {
-          showPrevImage(); // Swipe right -> show previous
-        } else {
-          showNextImage(); // Swipe left -> show next
-        }
+    window.addEventListener('mouseup', () => {
+      if (isPanning) {
+        isPanning = false;
+        lightboxImg.style.cursor = lightboxImg.classList.contains('zoomed') ? 'zoom-out' : 'zoom-in';
+        lightboxImg.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)'; // re-enable transition
       }
-      distSwipeX = 0;
     });
 
-    // Touch swipe for mobile devices
+    // Touch events for mobile dragging / gliding
     lightboxImg.addEventListener('touchstart', (e) => {
+      if (!lightboxImg.classList.contains('zoomed')) return;
       if (e.touches.length === 1) {
-        startSwipeX = e.touches[0].clientX;
-        isSwiping = true;
+        isPanning = true;
+        startPanX = e.touches[0].clientX - panX;
+        startPanY = e.touches[0].clientY - panY;
+        lightboxImg.style.transition = 'none';
       }
     }, { passive: true });
 
     lightboxImg.addEventListener('touchmove', (e) => {
-      if (!isSwiping || e.touches.length !== 1) return;
-      distSwipeX = e.touches[0].clientX - startSwipeX;
+      if (!isPanning || e.touches.length !== 1) return;
+      panX = e.touches[0].clientX - startPanX;
+      panY = e.touches[0].clientY - startPanY;
+
+      const maxPanX = Math.max(150, lightboxImg.offsetWidth / 2);
+      const maxPanY = Math.max(150, lightboxImg.offsetHeight / 2);
+      panX = Math.max(Math.min(panX, maxPanX), -maxPanX);
+      panY = Math.max(Math.min(panY, maxPanY), -maxPanY);
+
+      lightboxImg.style.transform = `scale(2) translate(${panX / 2}px, ${panY / 2}px)`;
     }, { passive: true });
 
     lightboxImg.addEventListener('touchend', () => {
-      if (!isSwiping) return;
-      isSwiping = false;
-      if (Math.abs(distSwipeX) > 50) { // Touch swipe threshold
-        if (distSwipeX > 0) {
-          showPrevImage();
-        } else {
-          showNextImage();
-        }
+      if (isPanning) {
+        isPanning = false;
+        lightboxImg.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
       }
-      distSwipeX = 0;
     });
   }
 
