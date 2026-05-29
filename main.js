@@ -359,18 +359,45 @@ document.addEventListener('DOMContentLoaded', () => {
       isDragging = true;
     });
 
-    // 3. Scroll Progress Bar Fill Updater
+    // 3. Scroll Progress Bar Fill & Center Card Focus Updater
     const updateScrollProgress = () => {
       const scrollableWidth = sliderContainer.scrollWidth - sliderContainer.clientWidth;
       if (scrollableWidth <= 0) {
         if (progressFill) progressFill.style.width = '0%';
-        return;
+      } else {
+        const scrollPercent = (sliderContainer.scrollLeft / scrollableWidth) * 100;
+        if (progressFill) {
+          progressFill.style.width = `${Math.min(Math.max(scrollPercent, 0), 100)}%`;
+        }
       }
-      
-      const scrollPercent = (sliderContainer.scrollLeft / scrollableWidth) * 100;
-      if (progressFill) {
-        progressFill.style.width = `${Math.min(Math.max(scrollPercent, 0), 100)}%`;
-      }
+
+      // Automatically identify and highlight center-focused card on scroll/drag/touch
+      const cards = sliderTrack.querySelectorAll('.portfolio-card');
+      const containerRect = sliderContainer.getBoundingClientRect();
+      const containerCenter = containerRect.left + containerRect.width / 2;
+
+      let closestCard = null;
+      let minDistance = Infinity;
+
+      cards.forEach(card => {
+        if (card.classList.contains('filtered-out')) return;
+        const cardRect = card.getBoundingClientRect();
+        const cardCenter = cardRect.left + cardRect.width / 2;
+        const distance = Math.abs(containerCenter - cardCenter);
+
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestCard = card;
+        }
+      });
+
+      cards.forEach(card => {
+        if (card === closestCard) {
+          card.classList.add('active-card');
+        } else {
+          card.classList.remove('active-card');
+        }
+      });
     };
 
     sliderContainer.addEventListener('scroll', updateScrollProgress);
@@ -1281,5 +1308,199 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   sections.forEach(section => scrollspyObserver.observe(section));
+
+  // ==========================================================================
+  // 15. FULLSCREEN GALLERY IMAGE LIGHTBOX WITH DRAG/SWIPE & DOUBLE-TAP ZOOM
+  // ==========================================================================
+  const bentoGrid = document.getElementById('modal-bento-grid');
+  const lightbox = document.getElementById('gallery-lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const lightboxClose = document.getElementById('lightbox-close');
+  const lightboxPrev = document.getElementById('lightbox-prev');
+  const lightboxNext = document.getElementById('lightbox-next');
+
+  let activeGalleryImages = [];
+  let currentImgIndex = 0;
+
+  if (bentoGrid && lightbox && lightboxImg) {
+    bentoGrid.addEventListener('click', (e) => {
+      const card = e.target.closest('.detail-bento-card.has-image');
+      if (!card) return;
+
+      // Extract all background images in bento grid
+      const cardsWithImages = Array.from(bentoGrid.querySelectorAll('.detail-bento-card.has-image'));
+      activeGalleryImages = cardsWithImages.map(c => {
+        // Extract URL from style background-image e.g. url("...")
+        const bg = c.style.backgroundImage;
+        return bg.replace(/^url\(["']?/, '').replace(/["']?\)$/, '');
+      });
+
+      // Find current clicked image index
+      const clickedBg = card.style.backgroundImage;
+      const clickedUrl = clickedBg.replace(/^url\(["']?/, '').replace(/["']?\)$/, '');
+      currentImgIndex = activeGalleryImages.indexOf(clickedUrl);
+
+      // Open Lightbox
+      openLightbox(currentImgIndex);
+    });
+
+    const openLightbox = (index) => {
+      if (index < 0 || index >= activeGalleryImages.length) return;
+      currentImgIndex = index;
+
+      lightboxImg.src = activeGalleryImages[currentImgIndex];
+      lightboxImg.classList.remove('zoomed'); // Reset zoom state
+
+      lightbox.classList.add('active');
+      
+      // Hide arrows if there is only 1 image in bento gallery
+      if (activeGalleryImages.length <= 1) {
+        if (lightboxPrev) lightboxPrev.style.display = 'none';
+        if (lightboxNext) lightboxNext.style.display = 'none';
+      } else {
+        if (lightboxPrev) lightboxPrev.style.display = '';
+        if (lightboxNext) lightboxNext.style.display = '';
+      }
+    };
+
+    const closeLightbox = () => {
+      lightbox.classList.remove('active');
+      setTimeout(() => {
+        if (!lightbox.classList.contains('active')) {
+          lightboxImg.src = '';
+        }
+      }, 300);
+    };
+
+    const showPrevImage = () => {
+      let nextIndex = currentImgIndex - 1;
+      if (nextIndex < 0) nextIndex = activeGalleryImages.length - 1; // loop around
+      openLightbox(nextIndex);
+    };
+
+    const showNextImage = () => {
+      let nextIndex = currentImgIndex + 1;
+      if (nextIndex >= activeGalleryImages.length) nextIndex = 0; // loop around
+      openLightbox(nextIndex);
+    };
+
+    // Close button
+    if (lightboxClose) {
+      lightboxClose.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeLightbox();
+      });
+    }
+
+    // Navigation arrows
+    if (lightboxPrev) {
+      lightboxPrev.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showPrevImage();
+      });
+    }
+
+    if (lightboxNext) {
+      lightboxNext.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showNextImage();
+      });
+    }
+
+    // Backdrop click close
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox || e.target === lightbox.querySelector('.lightbox-image-container')) {
+        closeLightbox();
+      }
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('active')) return;
+      if (e.key === 'Escape') {
+        closeLightbox();
+      } else if (e.key === 'ArrowLeft') {
+        showPrevImage();
+      } else if (e.key === 'ArrowRight') {
+        showNextImage();
+      }
+    });
+
+    // 1. Double tap / Double click to Zoom
+    let lastTap = 0;
+    const handleZoomToggle = (e) => {
+      e.preventDefault();
+      lightboxImg.classList.toggle('zoomed');
+    };
+
+    lightboxImg.addEventListener('dblclick', handleZoomToggle);
+
+    // Double-tap zoom for mobile devices
+    lightboxImg.addEventListener('touchend', (e) => {
+      const currentTime = new Date().getTime();
+      const tapDelay = currentTime - lastTap;
+      if (tapDelay < 300 && tapDelay > 0) {
+        handleZoomToggle(e);
+      }
+      lastTap = currentTime;
+    });
+
+    // 2. Swipe Slide support (touch and mouse drag)
+    let startSwipeX = 0;
+    let distSwipeX = 0;
+    let isSwiping = false;
+
+    // Mouse drag swipe
+    lightboxImg.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      startSwipeX = e.clientX;
+      isSwiping = true;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isSwiping) return;
+      distSwipeX = e.clientX - startSwipeX;
+    });
+
+    window.addEventListener('mouseup', (e) => {
+      if (!isSwiping) return;
+      isSwiping = false;
+      // Swipe threshold check
+      if (Math.abs(distSwipeX) > 80) {
+        if (distSwipeX > 0) {
+          showPrevImage(); // Swipe right -> show previous
+        } else {
+          showNextImage(); // Swipe left -> show next
+        }
+      }
+      distSwipeX = 0;
+    });
+
+    // Touch swipe for mobile devices
+    lightboxImg.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        startSwipeX = e.touches[0].clientX;
+        isSwiping = true;
+      }
+    }, { passive: true });
+
+    lightboxImg.addEventListener('touchmove', (e) => {
+      if (!isSwiping || e.touches.length !== 1) return;
+      distSwipeX = e.touches[0].clientX - startSwipeX;
+    }, { passive: true });
+
+    lightboxImg.addEventListener('touchend', () => {
+      if (!isSwiping) return;
+      isSwiping = false;
+      if (Math.abs(distSwipeX) > 50) { // Touch swipe threshold
+        if (distSwipeX > 0) {
+          showPrevImage();
+        } else {
+          showNextImage();
+        }
+      }
+      distSwipeX = 0;
+    });
+  }
 
 });
