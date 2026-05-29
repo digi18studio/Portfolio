@@ -249,7 +249,15 @@
 
       <!-- Interactive Bento Grid -->
       <!-- Premium Row-Based Interactive Showcase (as per User Sketch) -->
-      <div class="portfolio-bento-grid" id="portfolio-bento-grid">
+      <div class="skills-slider-wrapper">
+        <button class="slider-nav-btn prev-btn hovering-link-target" id="skills-slider-prev" aria-label="Previous Slide">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        
+        <div class="skills-slider-container" id="skills-slider-container">
+          <div class="skills-slider-track" id="skills-slider-track">
 
         <!-- ROW CARD 1: Graphic Design -->
         <div class="portfolio-card filtered-in" data-category="uiux-web" data-project-id="1">
@@ -527,6 +535,18 @@
           </div>
         </div>
 
+          </div>
+        </div>
+        
+        <button class="slider-nav-btn next-btn hovering-link-target" id="skills-slider-next" aria-label="Next Slide">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="slider-progress-bar-wrap">
+        <div class="slider-progress-bar-fill" id="slider-progress-fill"></div>
       </div>
     </div>
   </section>

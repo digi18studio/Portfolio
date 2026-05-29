@@ -163,6 +163,15 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Refresh mouse link sizes since list layout reshuffled
       setTimeout(addHoverEffects, 300);
+
+      // Reset scroll position and sync progress bar after filtering
+      const sliderContainer = document.getElementById('skills-slider-container');
+      if (sliderContainer) {
+        sliderContainer.scrollLeft = 0;
+        setTimeout(() => {
+          sliderContainer.dispatchEvent(new Event('scroll'));
+        }, 100);
+      }
     });
   });
 
@@ -282,27 +291,96 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // ==========================================================================
-  // 6. PREMIUM ACCORDION-STYLE INLINE EXPANSION SYSTEM
+  // 6. PREMIUM HORIZONTAL SLIDER INTERACTION SYSTEM
   // ==========================================================================
-  
-  // Wrap existing portfolio card children in a header container dynamically to support accordion layout
-  portfolioCards.forEach(card => {
-    const header = document.createElement('div');
-    header.className = 'portfolio-card-header';
-    header.setAttribute('role', 'button');
-    header.setAttribute('aria-expanded', 'false');
-    header.setAttribute('tabindex', '0');
-    
-    // Move all initial elements (media box, content box, action btn wrap) inside the header
-    while (card.firstChild) {
-      header.appendChild(card.firstChild);
-    }
-    
-    card.appendChild(header);
-    header.classList.add('hovering-link-target');
-  });
+  const sliderContainer = document.getElementById('skills-slider-container');
+  const sliderTrack = document.getElementById('skills-slider-track');
+  const prevBtn = document.getElementById('skills-slider-prev');
+  const nextBtn = document.getElementById('skills-slider-next');
+  const progressFill = document.getElementById('slider-progress-fill');
 
-  // Re-run hover effects so the new header elements register interactive cursor reactions
+  if (sliderContainer && sliderTrack) {
+    // 1. Navigation Button clicks
+    const getCardWidth = () => {
+      const card = sliderTrack.querySelector('.portfolio-card');
+      return card ? card.offsetWidth + 24 : 384; // Card width + gap
+    };
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        sliderContainer.scrollLeft -= getCardWidth();
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        sliderContainer.scrollLeft += getCardWidth();
+      });
+    }
+
+    // 2. Desktop Drag-to-Scroll Functionality
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+    let isDragging = false;
+
+    sliderContainer.addEventListener('mousedown', (e) => {
+      // Prevent text selection/drag on interactive elements
+      if (e.target.closest('a, button, input, textarea, .row-arrow-btn')) return;
+      isDown = true;
+      isDragging = false;
+      sliderContainer.classList.add('active-dragging');
+      startX = e.pageX - sliderContainer.offsetLeft;
+      scrollLeft = sliderContainer.scrollLeft;
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (isDown) {
+        isDown = false;
+        sliderContainer.classList.remove('active-dragging');
+        // Briefly delay setting isDragging to false to avoid misfiring click event
+        setTimeout(() => { isDragging = false; }, 50);
+      }
+    });
+
+    sliderContainer.addEventListener('mouseleave', () => {
+      if (isDown) {
+        isDown = false;
+        sliderContainer.classList.remove('active-dragging');
+      }
+    });
+
+    sliderContainer.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - sliderContainer.offsetLeft;
+      const walk = (x - startX) * 1.5; // Drag sensitivity
+      sliderContainer.scrollLeft = scrollLeft - walk;
+      isDragging = true;
+    });
+
+    // 3. Scroll Progress Bar Fill Updater
+    const updateScrollProgress = () => {
+      const scrollableWidth = sliderContainer.scrollWidth - sliderContainer.clientWidth;
+      if (scrollableWidth <= 0) {
+        if (progressFill) progressFill.style.width = '0%';
+        return;
+      }
+      
+      const scrollPercent = (sliderContainer.scrollLeft / scrollableWidth) * 100;
+      if (progressFill) {
+        progressFill.style.width = `${Math.min(Math.max(scrollPercent, 0), 100)}%`;
+      }
+    };
+
+    sliderContainer.addEventListener('scroll', updateScrollProgress);
+    window.addEventListener('resize', updateScrollProgress);
+    
+    // Initial sync
+    setTimeout(updateScrollProgress, 100);
+  }
+
+  // Re-run hover effects so all slider elements register interactive cursor reactions
   addHoverEffects();
 
   // Google Drive URL to high-speed CDN direct link converter functions
@@ -406,116 +484,102 @@ document.addEventListener('DOMContentLoaded', () => {
     return bentoHTML;
   };
 
-  // Accordion toggle click/keydown listeners
-  portfolioCards.forEach(card => {
-    const header = card.querySelector('.portfolio-card-header');
-    if (!header) return;
+  // ==========================================================================
+  // 7. PREMIUM DYNAMIC POP-UP MODAL OVERLAY CONTROLLER
+  // ==========================================================================
+  const modalOverlay = document.getElementById('project-modal');
+  const modalCloseBtn = document.getElementById('modal-close');
+  const modalMedia = document.getElementById('modal-project-media');
+  const modalCategory = document.getElementById('modal-project-category');
+  const modalTitle = document.getElementById('modal-project-title');
+  const modalDeliverables = document.getElementById('modal-project-deliverables');
+  const modalClient = document.getElementById('modal-project-client');
+  const modalDesc1 = document.getElementById('modal-project-desc-1');
+  const modalDesc2 = document.getElementById('modal-project-desc-2');
+  const modalBentoGrid = document.getElementById('modal-bento-grid');
 
-    const toggleAccordion = () => {
-      const projectId = card.getAttribute('data-project-id');
+  if (modalOverlay) {
+    const openProjectModal = (projectId) => {
       const data = projectDatabase[projectId];
-      
       if (!data) return;
 
-      let body = card.querySelector('.portfolio-card-body');
+      const directImgUrl = getDirectDriveImgLink(data.image);
 
-      // Create body dynamically if it doesn't exist yet
-      if (!body) {
-        body = document.createElement('div');
-        body.className = 'portfolio-card-body';
-        const directImgUrl = getDirectDriveImgLink(data.image);
-        body.innerHTML = `
-          <div class="detail-side-by-side">
-            <div class="detail-media-panel">
-              <img src="${directImgUrl}" alt="${data.title}">
-            </div>
-            <div class="detail-info-panel">
-              <div class="detail-meta-group">
-                <span class="detail-category-tag">${data.category}</span>
-                <h4 class="detail-title">${data.title}</h4>
-              </div>
-              <div class="detail-desc-group">
-                <p class="detail-desc-primary">${data.desc1}</p>
-                <p class="detail-desc-secondary">${data.desc2}</p>
-              </div>
-              <div class="detail-specs">
-                <div class="spec-item">
-                  <span class="spec-label">Deliverables</span>
-                  <span class="spec-value">${data.deliverables}</span>
-                </div>
-                <div class="spec-item">
-                  <span class="spec-label">Client / Context</span>
-                  <span class="spec-value">${data.client}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="detail-work-gallery">
-            <h4 class="gallery-title">Work Gallery & Deliverables</h4>
-            <div class="detail-bento-grid">
-              ${getBentoGalleryHTML(projectId, directImgUrl)}
-            </div>
-          </div>
-        `;
-        card.appendChild(body);
-        
-        // Refresh cursor link highlights inside expanded body
-        setTimeout(addHoverEffects, 50);
+      // Populate media: image/video element
+      if (modalMedia) {
+        modalMedia.innerHTML = `<img src="${directImgUrl}" alt="${data.title}">`;
       }
 
-      const isOpening = !card.classList.contains('active');
+      // Populate other metadata text
+      if (modalCategory) modalCategory.textContent = data.category || 'Service Scope';
+      if (modalTitle) modalTitle.textContent = data.title;
+      if (modalDeliverables) modalDeliverables.textContent = data.deliverables;
+      if (modalClient) modalClient.textContent = data.client;
+      if (modalDesc1) modalDesc1.textContent = data.desc1;
+      if (modalDesc2) modalDesc2.textContent = data.desc2;
 
-      // Collapse all other active cards first (Strict Accordion behavior)
-      portfolioCards.forEach(otherCard => {
-        if (otherCard !== card && otherCard.classList.contains('active')) {
-          otherCard.classList.remove('active');
-          const otherHeader = otherCard.querySelector('.portfolio-card-header');
-          if (otherHeader) otherHeader.setAttribute('aria-expanded', 'false');
-          const otherBody = otherCard.querySelector('.portfolio-card-body');
-          if (otherBody) {
-            otherBody.style.maxHeight = otherBody.scrollHeight + 'px';
-            otherBody.offsetHeight; // force reflow
-            otherBody.style.maxHeight = '0px';
-          }
-        }
-      });
-
-      if (isOpening) {
-        card.classList.add('active');
-        header.setAttribute('aria-expanded', 'true');
-        body.style.maxHeight = '0px';
-        body.offsetHeight; // force reflow
-        body.style.maxHeight = body.scrollHeight + 'px';
-        
-        // Let height remain responsive after transition ends
-        setTimeout(() => {
-          if (card.classList.contains('active')) {
-            body.style.maxHeight = 'none';
-          }
-        }, 500);
-
-        // Smooth scroll cards into viewport
-        setTimeout(() => {
-          card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 300);
-      } else {
-        card.classList.remove('active');
-        header.setAttribute('aria-expanded', 'false');
-        body.style.maxHeight = body.scrollHeight + 'px';
-        body.offsetHeight; // force reflow
-        body.style.maxHeight = '0px';
+      // Populate bento work gallery
+      if (modalBentoGrid) {
+        modalBentoGrid.innerHTML = getBentoGalleryHTML(projectId, directImgUrl);
       }
+
+      // Open Modal smoothly
+      modalOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden'; // Disable background body scroll
+
+      // Refresh custom cursor follower trigger sizes
+      setTimeout(addHoverEffects, 100);
     };
 
-    header.addEventListener('click', toggleAccordion);
+    const closeProjectModal = () => {
+      modalOverlay.classList.remove('active');
+      document.body.style.overflow = ''; // Re-enable scroll
 
-    header.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        toggleAccordion();
+      // Clear contents after transition finishes
+      setTimeout(() => {
+        if (!modalOverlay.classList.contains('active')) {
+          if (modalMedia) modalMedia.innerHTML = '';
+          if (modalBentoGrid) modalBentoGrid.innerHTML = '';
+        }
+      }, 400);
+    };
+
+    // 1. Click card to open modal
+    portfolioCards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        // Prevent click if we were dragging the slider
+        const sliderContainer = document.getElementById('skills-slider-container');
+        if (sliderContainer && sliderContainer.classList.contains('active-dragging')) {
+          return;
+        }
+        
+        const projectId = card.getAttribute('data-project-id');
+        openProjectModal(projectId);
+      });
+    });
+
+    // 2. Click Close button to close
+    if (modalCloseBtn) {
+      modalCloseBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeProjectModal();
+      });
+    }
+
+    // 3. Click outside modal to close
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) {
+        closeProjectModal();
       }
     });
-  });
+
+    // 4. Escape key press to close
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+        closeProjectModal();
+      }
+    });
+  }
 
 
   // ==========================================================================
@@ -741,32 +805,26 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // 3. Option B integration: Clicking planets triggers portfolio bento detailed view expansion
+    // 3. Option B integration: Clicking planets triggers portfolio detailed modal opening
     servicePlanets.forEach(planet => {
       planet.addEventListener('click', (e) => {
         e.stopPropagation();
         const projectId = planet.getAttribute('data-project-id');
         
-        // Find matching portfolio card in Bento grid
+        // Find matching portfolio card in track
         const projectCard = document.querySelector(`.portfolio-card[data-project-id="${projectId}"]`);
         
         if (projectCard) {
-          const cardHeader = projectCard.querySelector('.portfolio-card-header');
-          if (cardHeader) {
-            // First, smooth-scroll viewer down to curations section
-            const workSection = document.getElementById('work');
-            if (workSection) {
-              workSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-            
-            // Expand accordion once viewport matches position
-            setTimeout(() => {
-              // Only click if it's not already active/expanded
-              if (!projectCard.classList.contains('active')) {
-                cardHeader.click();
-              }
-            }, 650);
+          // First, smooth-scroll viewer down to curations section
+          const workSection = document.getElementById('work');
+          if (workSection) {
+            workSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
+          
+          // Open popup detailed view modal once viewport matches position
+          setTimeout(() => {
+            projectCard.click();
+          }, 650);
         }
       });
     });
