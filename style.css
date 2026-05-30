@@ -53,9 +53,17 @@
   --glow-pr: rgba(230, 0, 255, 0.4);
   --glow-ae: rgba(200, 150, 255, 0.4);
   --glow-figma: rgba(242, 78, 30, 0.4);
-  --glow-vscode: rgba(0, 122, 204, 0.4);
   --glow-davinci: rgba(255, 69, 0, 0.4);
   --glow-id: rgba(255, 0, 102, 0.4);
+
+  /* Themed Infographic Bento backgrounds (Dark Mode - Slightly Lighter Box Base for visibility) */
+  --bento-stat-bg-1: linear-gradient(135deg, #1c1c2a 0%, #0f0f18 100%);
+  --bento-stat-bg-2: linear-gradient(135deg, #1e1e30 0%, #10101b 100%);
+  --bento-stat-bg-3: linear-gradient(135deg, #1e1e30 0%, #10101b 100%);
+  --bento-stat-bg-4: linear-gradient(135deg, #1c1c2a 0%, #0f0f18 100%);
+  --bento-stat-bg-5: linear-gradient(135deg, #1c1c2a 0%, #0f0f18 100%);
+  --bento-stat-bg-6: linear-gradient(135deg, #1e1e30 0%, #10101b 100%);
+  --bento-stat-border: 1px solid rgba(255, 255, 255, 0.22); /* Light high-contrast stroke for box boundaries */
 }
 
 /* Light Theme Overrides */
@@ -81,6 +89,15 @@
   --bento-dummy-bg: rgba(0, 0, 0, 0.03);
   --bento-dummy-border: rgba(0, 0, 0, 0.12);
   --bento-dummy-hover: rgba(0, 0, 0, 0.06);
+
+  /* Bento Stat Card Variable Overrides - Light theme (Clean White Card style) */
+  --bento-stat-bg-1: linear-gradient(135deg, #ffffff 0%, #f6f6f3 100%);
+  --bento-stat-bg-2: linear-gradient(135deg, #ffffff 0%, #f6f6f3 100%);
+  --bento-stat-bg-3: linear-gradient(135deg, #ffffff 0%, #f6f6f3 100%);
+  --bento-stat-bg-4: linear-gradient(135deg, #ffffff 0%, #f6f6f3 100%);
+  --bento-stat-bg-5: linear-gradient(135deg, #ffffff 0%, #f6f6f3 100%);
+  --bento-stat-bg-6: linear-gradient(135deg, #ffffff 0%, #f6f6f3 100%);
+  --bento-stat-border: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 /* --- Base Styles & Reset --- */
@@ -1536,6 +1553,41 @@ body.hovering-dark .custom-cursor-follower {
   box-shadow: var(--card-shadow);
 }
 
+/* Custom backgrounds for Bento Stat Cards mapping to variables */
+.bento-stat-card.bento-stat-card-1 {
+  background: var(--bento-stat-bg-1) no-repeat center center / cover;
+  border: var(--bento-stat-border);
+}
+.bento-stat-card.bento-stat-card-2 {
+  background: var(--bento-stat-bg-2) no-repeat center center / cover;
+  border: var(--bento-stat-border);
+}
+.bento-stat-card.bento-stat-card-3 {
+  background: var(--bento-stat-bg-3) no-repeat center center / cover;
+  border: var(--bento-stat-border);
+}
+.bento-stat-card.bento-stat-card-4 {
+  background: var(--bento-stat-bg-4) no-repeat center center / cover;
+  border: var(--bento-stat-border);
+}
+.bento-stat-card.bento-stat-card-5 {
+  background: var(--bento-stat-bg-5) no-repeat center center / cover;
+  border: var(--bento-stat-border);
+}
+.bento-stat-card.bento-stat-card-6 {
+  background: var(--bento-stat-bg-6) no-repeat center center / cover;
+  border: var(--bento-stat-border);
+}
+
+.bento-stat-card.bento-stat-card-1:hover,
+.bento-stat-card.bento-stat-card-2:hover,
+.bento-stat-card.bento-stat-card-3:hover,
+.bento-stat-card.bento-stat-card-4:hover,
+.bento-stat-card.bento-stat-card-5:hover,
+.bento-stat-card.bento-stat-card-6:hover {
+  border-color: var(--accent-color) !important;
+}
+
 /* Spans configuration for true bento layout */
 .bento-stat-card.span-2 {
   grid-column: span 2;
@@ -1862,70 +1914,7 @@ body.hovering-dark .custom-cursor-follower {
   line-height: 1.2;
 }
 
-/* Software card hover customized border glows */
-.software-card[data-software="photoshop"]:hover {
-  box-shadow: 0 10px 30px var(--glow-ps);
-  border-color: rgba(0, 201, 255, 0.4);
-}
-.software-card[data-software="photoshop"] .software-card-glow {
-  background: radial-gradient(circle at center, rgba(0, 201, 255, 0.1) 0%, transparent 70%);
-}
 
-.software-card[data-software="illustrator"]:hover {
-  box-shadow: 0 10px 30px var(--glow-ai);
-  border-color: rgba(255, 154, 0, 0.4);
-}
-.software-card[data-software="illustrator"] .software-card-glow {
-  background: radial-gradient(circle at center, rgba(255, 154, 0, 0.1) 0%, transparent 70%);
-}
-
-.software-card[data-software="premiere"]:hover {
-  box-shadow: 0 10px 30px var(--glow-pr);
-  border-color: rgba(230, 0, 255, 0.4);
-}
-.software-card[data-software="premiere"] .software-card-glow {
-  background: radial-gradient(circle at center, rgba(230, 0, 255, 0.1) 0%, transparent 70%);
-}
-
-.software-card[data-software="aftereffects"]:hover {
-  box-shadow: 0 10px 30px var(--glow-ae);
-  border-color: rgba(200, 150, 255, 0.4);
-}
-.software-card[data-software="aftereffects"] .software-card-glow {
-  background: radial-gradient(circle at center, rgba(200, 150, 255, 0.1) 0%, transparent 70%);
-}
-
-.software-card[data-software="figma"]:hover {
-  box-shadow: 0 10px 30px var(--glow-figma);
-  border-color: rgba(242, 78, 30, 0.4);
-}
-.software-card[data-software="figma"] .software-card-glow {
-  background: radial-gradient(circle at center, rgba(242, 78, 30, 0.1) 0%, transparent 70%);
-}
-
-.software-card[data-software="vscode"]:hover {
-  box-shadow: 0 10px 30px var(--glow-vscode);
-  border-color: rgba(0, 122, 204, 0.4);
-}
-.software-card[data-software="vscode"] .software-card-glow {
-  background: radial-gradient(circle at center, rgba(0, 122, 204, 0.1) 0%, transparent 70%);
-}
-
-.software-card[data-software="davinci"]:hover {
-  box-shadow: 0 10px 30px var(--glow-davinci);
-  border-color: rgba(255, 69, 0, 0.4);
-}
-.software-card[data-software="davinci"] .software-card-glow {
-  background: radial-gradient(circle at center, rgba(255, 69, 0, 0.1) 0%, transparent 70%);
-}
-
-.software-card[data-software="indesign"]:hover {
-  box-shadow: 0 10px 30px var(--glow-id);
-  border-color: rgba(255, 0, 102, 0.4);
-}
-.software-card[data-software="indesign"] .software-card-glow {
-  background: radial-gradient(circle at center, rgba(255, 0, 102, 0.1) 0%, transparent 70%);
-}
 
 /* ==========================================================================
    CONTACT SECTION (CREATIVE FOOTER & CTA)
@@ -3658,7 +3647,7 @@ body.hovering-dark .custom-cursor-follower {
    ========================================================================== */
 .mobile-desktop-site .hero-section {
   min-height: auto !important;
-  padding-top: 85px !important;
+  padding-top: 190px !important; /* Shunted down to create ideal breathing space between fixed navbar and hero image */
   padding-bottom: 40px !important;
 }
 
@@ -3683,7 +3672,7 @@ body.hovering-dark .custom-cursor-follower {
   transform: scale(1.65) !important;
   height: 440px !important;
   margin-bottom: 20px !important;
-  margin-top: -35px !important;
+  margin-top: 25px !important; /* Pushed down to prevent navbar collision */
 }
 
 .mobile-desktop-site .hero-tag {
