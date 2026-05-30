@@ -881,7 +881,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Setup loop and drag-scroll on marquee containers
   const setupInfiniteMarquee = (rowEl, scrollSpeed = 0.65) => {
-    const track = rowEl.querySelector('.software-marquee-track, .client-marquee-track');
+    const track = rowEl.querySelector('.software-marquee-track, .client-marquee-track, .clients-marquee-track');
     if (!track) return;
 
     // Duplicate children to enable seamless looping
@@ -982,6 +982,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const clientMarquee = document.getElementById('client-marquee-container');
   if (clientMarquee) {
     setupInfiniteMarquee(clientMarquee, 0.32);
+  }
+
+  // Launch Marquee row for clients logos (infinite auto-scroll + drag/swipe scroll)
+  const clientsLogoMarquee = document.getElementById('clients-logo-marquee');
+  if (clientsLogoMarquee) {
+    setupInfiniteMarquee(clientsLogoMarquee, 0.42);
   }
 
   // Custom Dropdown Checkboxes Interactive Logic

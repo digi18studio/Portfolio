@@ -3706,3 +3706,126 @@ body.hovering-dark .custom-cursor-follower {
   font-size: 1.15rem !important;
 }
 
+
+/* ==========================================================================
+   CLIENTS LOGO MARQUEE SECTION
+   ========================================================================== */
+.clients-marquee-section {
+  padding: 40px 0 80px 0;
+  background: transparent;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.clients-marquee-wrapper {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 24px;
+  width: 100%;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .clients-marquee-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+}
+
+.clients-marquee-title {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.clients-marquee-outer-box {
+  position: relative;
+  flex-grow: 1;
+  width: 100%;
+}
+
+.clients-marquee-strip {
+  background: #ffffff;
+  border-radius: var(--radius-md); /* Premium slightly rounded corners, no capsule feel */
+  padding: 14px 40px;
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  scrollbar-width: none; /* Hide Firefox scrollbars */
+  -ms-overflow-style: none; /* Hide IE scrollbars */
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+  user-select: none;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  width: 100%;
+}
+
+.clients-marquee-strip::-webkit-scrollbar {
+  display: none; /* Hide WebKit scrollbars */
+}
+
+.clients-marquee-strip.active-dragging {
+  cursor: grabbing;
+}
+
+/* Premium edge fades placed on the static outer box wrapper so they stay perfectly fixed! */
+.clients-marquee-outer-box::before,
+.clients-marquee-outer-box::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  width: 80px;
+  height: calc(100% - 2px);
+  z-index: 2;
+  pointer-events: none;
+  border-radius: var(--radius-md);
+}
+
+.clients-marquee-outer-box::before {
+  left: 1px;
+  background: linear-gradient(to right, #ffffff 20%, rgba(255, 255, 255, 0) 100%);
+}
+
+.clients-marquee-outer-box::after {
+  right: 1px;
+  background: linear-gradient(to left, #ffffff 20%, rgba(255, 255, 255, 0) 100%);
+}
+
+.clients-marquee-track {
+  display: flex;
+  gap: 42px; /* Tighter gap between logos for compressed premium spacing */
+  width: max-content;
+  align-items: center;
+}
+
+.client-logo-item {
+  width: 110px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.client-logo-item img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: grayscale(100%);
+  opacity: 0.65;
+  transition: filter 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.client-logo-item:hover img {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+
