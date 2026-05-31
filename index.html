@@ -12,6 +12,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+  <script>
+    // Immediately apply custom cursor preference to prevent flashing during page load
+    if (localStorage.getItem('custom-cursor-disabled') === 'true') {
+      document.documentElement.classList.add('custom-cursor-disabled');
+    }
+  </script>
+
   <!-- External Stylesheet -->
   <link rel="stylesheet" href="style.css">
 </head>
@@ -1593,6 +1600,30 @@
       <button class="lightbox-bottom-btn hovering-link-target" id="lightbox-next"
         aria-label="Next photo">&#10095;</button>
     </div>
+  </div>
+
+  <!-- Floating Action Controls: Back to Top & Cursor Toggle -->
+  <div class="floating-controls-container" id="floating-controls">
+    <button class="control-btn hovering-link-target" id="cursor-toggle-btn" aria-label="Toggle Custom Cursor" title="Disable Custom Cursor (Save CPU)">
+      <!-- Mouse Cursor Icon -->
+      <svg class="cursor-icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"></path>
+        <path d="M13 13l6 6"></path>
+      </svg>
+      <!-- Mouse Cursor Icon crossed out with a line -->
+      <svg class="cursor-icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+        <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z" style="opacity: 0.5;"></path>
+        <path d="M13 13l6 6" style="opacity: 0.5;"></path>
+        <line x1="1" y1="1" x2="23" y2="23" stroke="#fe7e07" stroke-width="2.5"></line>
+      </svg>
+    </button>
+    <button class="control-btn hovering-link-target" id="back-to-top-btn" aria-label="Back to Top" title="Back to Top">
+      <!-- Up Arrow Icon -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="19" x2="12" y2="5"></line>
+        <polyline points="5 12 12 5 19 12"></polyline>
+      </svg>
+    </button>
   </div>
 
   <!-- External Script -->

@@ -4018,3 +4018,137 @@ body.hovering-dark .custom-cursor-follower {
   filter: none;
   opacity: 1;
 }
+
+/* ==========================================================================
+   FLOATING ACTIONS: BACK TO TOP & CURSOR TOGGLE
+   ========================================================================== */
+.floating-controls-container {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: center;
+  z-index: 99999;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  padding: 8px;
+  border-radius: var(--radius-full);
+  box-shadow: var(--card-shadow);
+  transition: opacity 0.3s var(--transition-fast), transform 0.3s var(--transition-fast);
+}
+
+.control-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-primary);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.control-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--text-primary);
+  stroke-width: 2;
+  transition: transform var(--transition-smooth), stroke var(--transition-fast);
+}
+
+.control-btn:hover {
+  border-color: var(--accent-color);
+  background: var(--bg-tertiary);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px var(--accent-glow);
+}
+
+.control-btn:active {
+  transform: translateY(-1px);
+}
+
+/* Hide back-to-top initially */
+#back-to-top-btn {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(15px);
+  transition: opacity 0.3s var(--transition-fast), transform 0.3s var(--transition-fast);
+}
+
+#back-to-top-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* Custom Cursor Toggle Button States */
+#cursor-toggle-btn.disabled-state {
+  border-color: rgba(254, 126, 7, 0.4);
+  background: rgba(254, 126, 7, 0.05);
+}
+
+#cursor-toggle-btn.disabled-state svg {
+  stroke: var(--accent-color);
+}
+
+/* CSS cursor rules when custom cursor is disabled */
+html.custom-cursor-disabled,
+html.custom-cursor-disabled * {
+  cursor: auto !important;
+}
+
+html.custom-cursor-disabled a,
+html.custom-cursor-disabled button,
+html.custom-cursor-disabled select,
+html.custom-cursor-disabled textarea,
+html.custom-cursor-disabled input,
+html.custom-cursor-disabled .hovering-link-target,
+html.custom-cursor-disabled .portfolio-card,
+html.custom-cursor-disabled .btn-cta,
+html.custom-cursor-disabled .theme-toggle,
+html.custom-cursor-disabled .portfolio-arrow-btn,
+html.custom-cursor-disabled .row-arrow-btn,
+html.custom-cursor-disabled .slider-nav-btn,
+html.custom-cursor-disabled .control-btn,
+html.custom-cursor-disabled .nav-link,
+html.custom-cursor-disabled .social-link,
+html.custom-cursor-disabled .filter-tab,
+html.custom-cursor-disabled .hero-center-circle-wrapper,
+html.custom-cursor-disabled .hero-sun-wrapper,
+html.custom-cursor-disabled .service-planet {
+  cursor: pointer !important;
+}
+
+html.custom-cursor-disabled .custom-cursor,
+html.custom-cursor-disabled .custom-cursor-follower {
+  display: none !important;
+}
+
+html.custom-cursor-disabled .skills-slider-container.active-dragging,
+html.custom-cursor-disabled .skills-slider-container.active-dragging * {
+  cursor: grabbing !important;
+}
+
+/* Responsive adjustment */
+@media (max-width: 768px) {
+  .floating-controls-container {
+    bottom: 20px;
+    right: 20px;
+    padding: 6px;
+    gap: 8px;
+  }
+  
+  .control-btn {
+    width: 40px;
+    height: 40px;
+  }
+}

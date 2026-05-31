@@ -16,21 +16,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Track cursor movement
   document.addEventListener('mousemove', (e) => {
+    // Save CPU: Skip custom cursor positioning if disabled
+    if (document.documentElement.classList.contains('custom-cursor-disabled')) {
+      return;
+    }
+    
     mouseX = e.clientX;
     mouseY = e.clientY;
     
     // Position dot immediately
-    cursor.style.left = `${mouseX}px`;
-    cursor.style.top = `${mouseY}px`;
+    if (cursor) {
+      cursor.style.left = `${mouseX}px`;
+      cursor.style.top = `${mouseY}px`;
+    }
   });
 
   // Animate cursor follower with slight delay (smooth interpolation)
   function animateFollower() {
-    followerX += (mouseX - followerX) * 0.15;
-    followerY += (mouseY - followerY) * 0.15;
+    // Save CPU: Skip animation math & DOM styling updates if disabled
+    if (!document.documentElement.classList.contains('custom-cursor-disabled')) {
+      followerX += (mouseX - followerX) * 0.15;
+      followerY += (mouseY - followerY) * 0.15;
 
-    follower.style.left = `${followerX}px`;
-    follower.style.top = `${followerY}px`;
+      if (follower) {
+        follower.style.left = `${followerX}px`;
+        follower.style.top = `${followerY}px`;
+      }
+    }
 
     requestAnimationFrame(animateFollower);
   }
@@ -1541,6 +1553,80 @@ document.addEventListener('DOMContentLoaded', () => {
       if (isPanning) {
         isPanning = false;
         lightboxImg.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+      }
+    });
+  }
+
+  // ==========================================================================
+  // 12. FLOATING ACTION CONTROLS: BACK TO TOP & CURSOR TOGGLE
+  // ==========================================================================
+  const backToTopBtn = document.getElementById('back-to-top-btn');
+  const cursorToggleBtn = document.getElementById('cursor-toggle-btn');
+
+  // Handle Scroll to show/hide Back to Top button
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+      if (backToTopBtn) backToTopBtn.classList.add('visible');
+    } else {
+      if (backToTopBtn) backToTopBtn.classList.remove('visible');
+    }
+  });
+
+  // Smooth Scroll to Top on click
+  if (backToTopBtn) {
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  }
+
+  // Check initial custom cursor status
+  const isCursorDisabled = localStorage.getItem('custom-cursor-disabled') === 'true';
+  if (isCursorDisabled) {
+    // Note: document.documentElement.classList was already added in the head script,
+    // but let's make sure our toggle UI button state matches
+    if (cursorToggleBtn) {
+      cursorToggleBtn.classList.add('disabled-state');
+      const cursorOnIcon = cursorToggleBtn.querySelector('.cursor-icon-on');
+      const cursorOffIcon = cursorToggleBtn.querySelector('.cursor-icon-off');
+      if (cursorOnIcon) cursorOnIcon.style.display = 'none';
+      if (cursorOffIcon) cursorOffIcon.style.display = 'block';
+      cursorToggleBtn.setAttribute('title', 'Enable Custom Cursor');
+    }
+  }
+
+  // Toggle Custom Cursor
+  if (cursorToggleBtn) {
+    cursorToggleBtn.addEventListener('click', () => {
+      const currentlyDisabled = document.documentElement.classList.contains('custom-cursor-disabled');
+      const cursorOnIcon = cursorToggleBtn.querySelector('.cursor-icon-on');
+      const cursorOffIcon = cursorToggleBtn.querySelector('.cursor-icon-off');
+
+      if (currentlyDisabled) {
+        // Enable Custom Cursor
+        document.documentElement.classList.remove('custom-cursor-disabled');
+        localStorage.setItem('custom-cursor-disabled', 'false');
+        cursorToggleBtn.classList.remove('disabled-state');
+        if (cursorOnIcon) cursorOnIcon.style.display = 'block';
+        if (cursorOffIcon) cursorOffIcon.style.display = 'none';
+        
+        // Update helper titles
+        cursorToggleBtn.setAttribute('title', 'Disable Custom Cursor (Save CPU)');
+      } else {
+        // Disable Custom Cursor (Go back to default pointer)
+        document.documentElement.classList.add('custom-cursor-disabled');
+        localStorage.setItem('custom-cursor-disabled', 'true');
+        cursorToggleBtn.classList.add('disabled-state');
+        if (cursorOnIcon) cursorOnIcon.style.display = 'none';
+        if (cursorOffIcon) cursorOffIcon.style.display = 'block';
+
+        // Update helper titles
+        cursorToggleBtn.setAttribute('title', 'Enable Custom Cursor');
+
+        // Reset hover classes to ensure clean transition
+        document.body.classList.remove('hovering-link', 'hovering-dark');
       }
     });
   }
